@@ -17,7 +17,7 @@ def wait():
     print(f"LepiLed_buffer: {lepi_led_buffer}")
 
     log_schreiben(f"Zeitpuffer vor Sonnenuntergang und Nach Sonnenaufgang: {time_buffer}")    
-    log_schreiben(f"LepiLED wird {lepi_led_buffer} vor Sonnenaufgang ({experiment_end_time.strftime('%H:%M:%S')}) ausgeschaltet: {LepiLed_end_time}") 
+    log_schreiben(f"LepiLED wird {lepi_led_buffer} vor Sonnenaufgang ausgeschaltet: {LepiLed_end_time}") 
     
     print(f"experiment_end_time: {experiment_end_time}")
     print(F"jetzt : {lokale_Zeit}")
