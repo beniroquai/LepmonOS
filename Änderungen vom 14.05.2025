@@ -16,5 +16,7 @@ Trap_hmi Zeile 177 muss "if not" sein
 times.py: Zeile 12 und 23-27 ausschneiden.   Einfügen in start_up_01.py Zeile 9 + 25-32
                                               Einfügen in Capturing Z 17 + 80-84
 
+
+start_up_01 braucht 5 sekunden schlaf vor erstelle_ordner()
 Log.py Zeile 8
 
