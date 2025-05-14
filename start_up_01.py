@@ -31,6 +31,8 @@ except Exception as e:
     
 send_lora("Starte Falle\nBerechne Zeiten für FRam")
 
+time.sleep(5)
+
 erstelle_ordner()
 initialisiere_logfile()
 
