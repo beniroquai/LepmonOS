@@ -157,7 +157,8 @@ while True:
         time.sleep(time_to_next_image)
 
 
-    elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time):
+    elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time) or\
+         (experiment_end_time <= lokale_Zeit <= experiment_start_time) :
         try:
             checksum(csv_path, algorithm="md5")
         except Exception as e:
