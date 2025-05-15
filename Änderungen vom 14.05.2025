@@ -3,7 +3,7 @@ Meine SSH Verbindung ist leider abgeschmiert, deswegen habe ich alles neu hochla
 
 neue wait.py Datei mit Funktion
 
-Capturing.py Zeile 154-157 mit Try Except
+Capturing.py Zeile 154-157 mit Try Except, Zeile 161 mit weiterer Bedingung
 
 Config --> letzter Eintrag Orientierung
 
