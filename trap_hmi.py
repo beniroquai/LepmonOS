@@ -96,7 +96,7 @@ for _ in range(100): #200
         jetzt_local,_ = Zeit_aktualisieren()
         for i in range(5):
             _,lokale_Zeit = Zeit_aktualisieren()    
-            display_text("aktuelle Uhrzeit", jetzt_local,"")
+            display_text("aktuelle Uhrzeit", lokale_Zeit,"")
             time.sleep(1)
 
         display_text("Uhrzeit mit","rechter Taste", "neu stellen")  
