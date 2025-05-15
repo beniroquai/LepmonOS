@@ -11,7 +11,7 @@ Coordinates py: neue Funkrion set orientation + Aufruf in Zeile 217
 
 CSV handler: Zeile 14 + 34 jeweils Orientation
 
-Trap_hmi Zeile 177 muss "if not" sein
+Trap_hmi Zeile 177 muss "if not" sein, Zeile 99 zeitstempel ohne datum
 
 times.py: Zeile 12 und 23-27 ausschneiden.   Einfügen in start_up_01.py Zeile 9 + 25-32
                                               Einfügen in Capturing Z 17 + 80-84
