@@ -8,19 +8,26 @@ RUN apt update && apt install -y --no-install-recommends gnupg
 RUN echo "deb http://archive.raspberrypi.org/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list \
   && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 82B129927FA3303E
 
-RUN apt update && apt -y upgrade
 
-RUN apt update && apt install -y --no-install-recommends \
-         python3-pip \
-         python3-picamera2 \
-     && apt-get clean \
-     && apt-get autoremove \
-     && rm -rf /var/cache/apt/archives/* \
-     && rm -rf /var/lib/apt/lists/*
+# Install dev tools for compiling Python libraries (Comments in English only)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gnupg \
+  build-essential \
+  python3-dev \
+  python3-setuptools \
+  python3-distutils
+
+# Add Raspberry Pi repository
+RUN echo "deb http://archive.raspberrypi.org/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list \
+  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 82B129927FA3303E \
+  && apt-get update \
+  && apt-get -y upgrade \
+  && apt-get install -y --no-install-recommends python3-picamera2 \
+  && apt-get clean \
+  && apt-get autoremove \
+  && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
-# Copy and install Python dependencies
 RUN pip install --break-system-packages --no-cache-dir -r requirements.txt
 
 # mkdir and then copy files into /home/pi/LepmonOS 
