@@ -1,5 +1,5 @@
 import time
-from OLED_panel import display_text
+from utils.OLED_panel import display_text
 
 try:
     display_text("Willkommen", "Laden... 2/2", "")

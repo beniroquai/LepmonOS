@@ -7,10 +7,10 @@ from error_handling import error_message
 
 def erstelle_und_aktualisiere_csv(sensor_data):
     try:
-        dusk_treshold = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "dusk_treshold")
-        interval = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "interval")
-        sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber")    
-        path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder")
+        dusk_treshold = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "dusk_treshold")
+        interval = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "interval")
+        sensor_id = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "general", "serielnumber")    
+        path = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "general", "current_folder")
     except Exception as e:
         error_message(11,e)
     csv_name = f"{os.path.basename(path)}.csv"

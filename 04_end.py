@@ -1,6 +1,6 @@
 import os
-from lora import  send_lora
-from OLED_panel import display_text
+from utils.lora import  send_lora
+from utilsOLED_panel import display_text
 import time
 
 

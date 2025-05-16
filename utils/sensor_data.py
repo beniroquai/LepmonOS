@@ -31,7 +31,7 @@ def update_sensor_data(lib,key, value):
 
 def read_sensor_data(code,lokale_Zeit):
     try:
-        Dämmerungsschwellenwert = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "dusk_treshold")
+        Dämmerungsschwellenwert = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "dusk_treshold")
     except Exception as e:
         error_message(11,e)
     update_sensor_data(sensor_data, "code", code)

@@ -1,18 +1,20 @@
-from Camera import snap_image
-from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
-import time
-from RTC_new_time import set_hwc
-from coordinates import set_coordinates
-from times import *
-from json_read_write import *
+from utils.Camera import snap_image
+from utils.GPIO_Setup import turn_on_led, turn_off_led, button_pressed
+from utils.OLED_panel import display_text
+from utils.RTC_new_time import set_hwc
+from utils.coordinates import set_coordinates
+from utils.times import *
+from utils.json_read_write import *
+from utils.sensor_data import *
+from utils.service import *
+from utils.log import log_schreiben
+from utils.Lights import *
+from utils.find_focus import focus
+from utils.site_selection import set_location_code
+from utils.wait import wait 
+
 import json
-from sensor_data import *
-from service import *
-from log import log_schreiben
-from Lights import *
-from find_focus import focus
-from site_selection import set_location_code
+import time
 import os
 
 latitude, longitude,_,_ = (get_coordinates())
@@ -177,3 +179,4 @@ for _ in range(100): #200
 if Menu_open:
     log_schreiben("Falle nicht mit lokalem User Interface parametrisiert")
 print("Continue with wait")    
+wait()

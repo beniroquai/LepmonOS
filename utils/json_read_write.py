@@ -25,10 +25,10 @@ def get_value_from_section(file_path, section_name, key_name):
         return f"Fehler: {e}"
 
 def get_coordinates():
-    latitude = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "latitude")
-    longitude = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "longitude")
-    Pol = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "Pol")
-    Block = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "Block")
+    latitude = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "latitude")
+    longitude = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "longitude")
+    Pol = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "Pol")
+    Block = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "Block")
 
     if Pol == "N":
         Pol = ""

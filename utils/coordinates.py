@@ -87,8 +87,8 @@ def set_coordinates():
         else:
             time.sleep(.05)  
 
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "Pol",nordsued)     
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "Block",eastwest) 
+    write_value_to_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "Pol",nordsued)     
+    write_value_to_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "Block",eastwest) 
     print("saved information on hemisphere in configuration file")
 
 
@@ -171,8 +171,8 @@ def set_coordinates():
 # Prüfen, ob sich die Koordinaten geändert haben
     if latitude_write != latitude_read or longitude_write != longitude_read:
         log_schreiben(f"neue Koordinaten: Breite {latitude_write}, Länge {longitude_write}")
-        write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "latitude", latitude_write)     
-        write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "longitude", longitude_write)
+        write_value_to_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "latitude", latitude_write)     
+        write_value_to_section("/home/pi/LepmonOS/Lepmon_config.json", "GPS", "longitude", longitude_write)
 
         log_schreiben(f"neue Koordinaten wurden gespeichert")
         print("saved GPS coordinates in configuration file")

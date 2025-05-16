@@ -1,16 +1,16 @@
-from times import get_times_power
-from OLED_panel import display_text
-from service import *
-from log import log_schreiben
-from lora import send_lora
-from error_handling import *
-import time
-from times import *
-
+from utils.times import get_times_power
+from utils.OLED_panel import display_text
+from utils.service import *
+from utils.log import log_schreiben
+from utils.lora import send_lora
+from utils.error_handling import *
+from utils.times import *
 try:
-    from FRAM_acess import *
+    from utils.FRAM_acess import *
 except Exception as e:
      error_message(9,e)
+
+import time
      
  
 try:

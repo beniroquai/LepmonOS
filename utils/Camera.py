@@ -10,18 +10,18 @@ from log import log_schreiben
 from GPIO_Setup import button_pressed
 from sensor_data import read_sensor_data
 from error_handling import error_message
-
+IS_IMSWITCH = True
 try:
-    project_name = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","project_name")
-    sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","serielnumber")
-    province = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","province")
-    city_code = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","city")
+    project_name = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json","general","project_name")
+    sensor_id = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json","general","serielnumber")
+    province = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json","locality","province")
+    city_code = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json","locality","city")
 except Exception as e:
     error_message(11,e)
 
          
 
-def get_frame(Exposure):
+def get_frame_vimba(Exposure):
     with Vimba.get_instance() as vimba:
         cams = vimba.get_all_cameras()
 
@@ -32,7 +32,7 @@ def get_frame(Exposure):
 
                 cam.set_pixel_format(PixelFormat.Bgr8)
 
-                settings_file = '/home/Ento/LepmonOS/Kamera_Einstellungen.xml'.format(cam.get_id())
+                settings_file = '/home/pi/LepmonOS/Kamera_Einstellungen.xml'.format(cam.get_id())
                 cam.load_settings(settings_file, PersistType.All)
 
                 
@@ -40,7 +40,7 @@ def get_frame(Exposure):
                 exposure_time.set(Exposure*1000)
                 print(f"Exposure geändert:{(exposure_time.get()/1000):.0f}")
                 
-                frame = cam.get_frame(timeout_ms=5000).as_opencv_image()
+                frame = cam.get_frame_vimba(timeout_ms=5000).as_opencv_image()
                 
         except Exception as e:
                     error_message(1,e)
@@ -63,7 +63,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     :param file_extension: Dateierweiterung
     :param mode: "display" für lokale ausgabe oder "log" für speichern in der schleife
     """
-    ordnerpfad = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","current_folder")
+    ordnerpfad = get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json","general","current_folder")
     now = datetime.now()
     code = f"{project_name}{sensor_id}_{province}_{city_code}_{now.strftime('%Y')}-{now.strftime('%m')}-{now.strftime('%d')}_T_{now.strftime('%H%M')}"
     image_file = f"{code}.{file_extension}"
@@ -74,10 +74,17 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     print("dimme LED hoch")
     if mode == "display":
         display_text("Dimme LED","hoch","")
-        ordnerpfad = "/home/Ento/LepmonOS/"
+        ordnerpfad = "/home/pi/LepmonOS/"
         power_on = 0
 
-    frame = get_frame(Exposure)
+    if IS_IMSWITCH:
+        import imswitchclient.ImSwitchClient as imc
+        client = imc.ImSwitchClient(host="localhost", isHttps=True, port=8001)
+        # client.recordingManager.setExposureTime(Exposure)
+        # client.recordingManager.setGain(mGain)
+        frame = client.recordingManager.snapNumpyToFastAPI()
+    else:
+        frame = get_frame_vimba(Exposure)
 
     if frame is not None:
         Kamera_Fehlerserie = 0
