@@ -1,46 +1,44 @@
-# Use an Ubuntu base image for Raspberry Pi (ARM64)
-# build it using `docker buildx build --platform linux/arm64 -t lepmonos-arm64 .`
-# run privileged container using `docker run --privileged -it --rm -v /dev:/dev -v /tmp:/tmp -v /home/pi/LepmonOS:/home/pi/LepmonOS lepmonos-arm64`
+# Use Debian bookworm as base (ARM compatible).
 FROM debian:bookworm
 
-RUN apt update && apt install -y --no-install-recommends gnupg
-
-RUN echo "deb http://archive.raspberrypi.org/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list \
-  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 82B129927FA3303E
-
-
-# Install dev tools for compiling Python libraries (Comments in English only)
+# Install dev tools and Python (comments in English only).
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gnupg \
+  apt-utils \
   build-essential \
-  python3-dev \
-  python3-setuptools \
+  python3 \
   python3-distutils \
-  python3-pip
+  python3-pip \
+  python3-setuptools \
+  && rm -rf /var/lib/apt/lists/*
 
-# Add Raspberry Pi repository
+# Create a symlink so 'python' calls 'python3'.
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+# Add Raspberry Pi repository.
 RUN echo "deb http://archive.raspberrypi.org/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list \
   && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 82B129927FA3303E \
   && apt-get update \
   && apt-get -y upgrade \
   && apt-get install -y --no-install-recommends python3-picamera2 \
   && apt-get clean \
-  && apt-get autoremove \
-  && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --break-system-packages --no-cache-dir -r requirements.txt
+# Copy in requirements and install with pip.
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --break-system-packages --no-cache-dir -r /tmp/requirements.txt
 
-# mkdir and then copy files into /home/pi/LepmonOS 
+# Copy project files into /home/pi/LepmonOS.
 RUN mkdir -p /home/pi/LepmonOS
 COPY . /home/pi/LepmonOS
 
-# Set the working directory
-WORKDIR /home/pi/LepmonOS
-
-# Copy startup script and allow execution
+# Copy startup script to /opt and make it executable.
 COPY LepmonOS_start.sh /opt/LepmonOS_start.sh
 RUN chmod +x /opt/LepmonOS_start.sh
 
-# Entrypoint starts the script
+# Set the working directory.
+WORKDIR /home/pi/LepmonOS
+
+# Run the startup script by default.
 CMD ["/opt/LepmonOS_start.sh"]
