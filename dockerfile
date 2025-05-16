@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   python3-dev \
   python3-setuptools \
-  python3-distutils
+  python3-distutils \
+  python3-pip
 
 # Add Raspberry Pi repository
 RUN echo "deb http://archive.raspberrypi.org/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list \
