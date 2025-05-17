@@ -2,18 +2,29 @@ from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 import pytz
 import ephem
-from log import log_schreiben
-from error_handling import error_message
-from json_read_write import *
+from utils.log import log_schreiben
+from utils.error_handling import error_message
+from utils.json_read_write import *
 import time
 import time
 import board
 import adafruit_ds3231
 import subprocess
 
-i2c = board.I2C()
-rtc = adafruit_ds3231.DS3231(i2c)
+try:
+    i2c = board.I2C()
+    rtc = adafruit_ds3231.DS3231(i2c)
+except Exception as e:
+    # have a dummy class for RTC in case it is not connected
+    class DS3231_:
+        def __init__(self, i2c):
+            pass
 
+        @property
+        def datetime(self):
+            return time.localtime()
+    rtc = DS3231_(i2c=None)
+    print("RTC not connected, using system time instead.")
 def Zeit_aktualisieren():
     
     t = rtc.datetime
@@ -72,8 +83,8 @@ def get_sun():
 def get_experiment_times():
     try:
         latitude, longitude,_,_ = (get_coordinates()) 
-        lepi_led_buffer = timedelta(minutes=int(get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "LepiLed_buffer")))
-        time_buffer = timedelta(minutes=int(get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "time_buffer")))  
+        lepi_led_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "LepiLed_buffer")))
+        time_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "time_buffer")))  
     except Exception  as e:
         error_message(11,e)
     
@@ -102,7 +113,7 @@ def get_experiment_times():
 def get_times_power():
     latitude, longitude,_,_ = (get_coordinates()) 
 
-    time_buffer = timedelta(minutes=int(get_value_from_section("/home/pi/LepmonOS/Lepmon_config.json", "capture_mode", "time_buffer")))
+    time_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "time_buffer")))
     jetzt_local, _ = Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
     sunset, sunrise, _ = get_sun()
     

@@ -34,7 +34,7 @@ stop_event = threading.Event()      # shared shutdown flag
 
 
 # ────── paths / constants ─────────────────────────────────────────────────────
-CONFIG_PATH = "/home/pi/LepmonOS/Lepmon_config.json"
+CONFIG_PATH = "./config/Lepmon_config.json"
 LOG_PATH    = CONFIG_PATH
 API_PORT    = 8000
 

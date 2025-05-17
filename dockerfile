@@ -1,4 +1,7 @@
 # Use Debian bookworm as base (ARM compatible).
+# build it using `docker build -t lepmonos .`
+# run privileged container using `docker run --privileged -it --rm -v /dev:/dev -v /tmp:/tmp -v /home/pi/LepmonOS:/home/pi/LepmonOS lepmonos
+# docker run --privileged -it --rm lepmonos:latest 
 FROM debian:bookworm
 
 # Install dev tools and Python (comments in English only).
@@ -10,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-distutils \
   python3-pip \
   python3-setuptools \
+  python3-dev \   
   && rm -rf /var/lib/apt/lists/*
 
 # Create a symlink so 'python' calls 'python3'.
@@ -31,14 +35,18 @@ RUN pip install --break-system-packages --no-cache-dir -r /tmp/requirements.txt
 
 # Copy project files into /home/pi/LepmonOS.
 RUN mkdir -p /home/pi/LepmonOS
+
+# print date to breakup layers 
+RUN date
 COPY . /home/pi/LepmonOS
 
 # Copy startup script to /opt and make it executable.
 COPY LepmonOS_start.sh /opt/LepmonOS_start.sh
-RUN chmod +x /opt/LepmonOS_start.sh
+RUN chmod +x /home/pi/LepmonOS/LepmonOS_start.sh
+
 
 # Set the working directory.
 WORKDIR /home/pi/LepmonOS
 
 # Run the startup script by default.
-CMD ["/opt/LepmonOS_start.sh"]
+CMD ["/home/pi/LepmonOS/LepmonOS_start.sh"]

@@ -51,11 +51,16 @@ declare -x XDG_SESSION_TYPE="wayland"
 declare -x XDG_VTNR="7"
 declare -x _JAVA_AWT_WM_NONREPARENTING="1"
 
-python3 ~/LepmonOS/00_start_up.py
+sudo raspi-config nonint do_i2c 0
+# list the Lepmon folder and subfolders 
+ls -R ~/LepmonOS
+# list the content of the Lepmon folder
+cd ~/LepmonOS
+python3 00_start_up.py
 #python3 ~/LepmonOS/01_start_up.py
-python3 ~/LepmonOS/02_trap_hmi.py
-python3 ~/LepmonOS/03_capturing.py
-python3 ~/LepmonOS/04_end.py
+python3 02_trap_hmi.py
+python3 03_capturing.py
+python3 04_end.py
 
 
 
