@@ -10,7 +10,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: DesBoe/LepmonOS
+  IMAGE_NAME: desboe/lepmonos
 
 jobs:
   build-arm64:
