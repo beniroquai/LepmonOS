@@ -147,7 +147,8 @@ while True:
         time_to_next_image = (next_image - lokale_Zeit).total_seconds()
 
         log_schreiben(f"Warten bis zur nächsten Aufnahme: {round(time_to_next_image,0)} Sekunden")
-        if time_to_next_image < 0:
+        print(f"Warten bis zur nächsten Aufnahme: {round(time_to_next_image,0)} Sekunden")
+        if time_to_next_image > 0:
             time.sleep(time_to_next_image)
 
 
