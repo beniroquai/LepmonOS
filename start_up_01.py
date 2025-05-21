@@ -44,7 +44,7 @@ send_lora("Starte Falle\nBerechne Zeiten für FRam")
 write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder", "")
 write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log", "")
 print("Konfigurationsdatei zurückgesetzt")
-time.sleep(2)
+time.sleep(6)
 
 erstelle_ordner()
 initialisiere_logfile()
