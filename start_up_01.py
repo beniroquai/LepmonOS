@@ -9,6 +9,7 @@ from times import *
 from json_read_write import write_value_to_section
 from Lights import dim_down
 import subprocess
+from RTC_alarm import set_alarm
 
 try:
     from fram_direct import *
@@ -19,7 +20,7 @@ except Exception as e:
      error_message(9,e)
 
 dim_down()
-
+jetzt_local,_ = Zeit_aktualisieren()
 try:
         subprocess.run(['sudo', 'date', "-s", jetzt_local])
         print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
@@ -76,8 +77,11 @@ print("power on time:",  power_on)
 print("power off time:", power_off)
 log_schreiben(f"Zeit für Power on mit Attiny:  {power_on}")
 log_schreiben(f"Zeit für Power off mit Attiny: {power_off}")
+set_alarm(power_on, power_off)
 
 send_lora(f"Zeit für Power on mit Attiny:  {power_on}\nZeit für Power off mit Attiny: {power_off}")
+
+set_alarm(power_on, power_off)
   
 
 try:
