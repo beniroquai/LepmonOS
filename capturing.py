@@ -16,6 +16,7 @@ from datetime import timedelta
 from wait import wait 
 
 wait()
+log_schreiben("Beginne Daten und Bildaufnahme")
 try: 
     total_space_gb, used_space_gb, free_space_gb, used_percent, free_percent = get_disk_space()
     log_schreiben(f"USB Speicher gesamt: {total_space_gb} GB")
@@ -44,7 +45,6 @@ Fang_begonnen = False
 UV_active = False
 Kamera_Fehlerserie = 0
 
-log_schreiben("Beginne Daten und Bildaufnahme")
 print("LepiLED aus:", LepiLed_end_time)
 print("Beginne Schleife", experiment_start_time)
 print("beende Schleife:", experiment_end_time)
@@ -152,8 +152,12 @@ while True:
             time.sleep(time_to_next_image)
 
 
-    elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time):
-        checksum(csv_path, algorithm="md5")
+     elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time) or\
+         (experiment_end_time <= lokale_Zeit <= experiment_start_time) :
+        try:
+            checksum(csv_path, algorithm="md5")
+        except Exception as e:
+            print(f"Checksumme der Metadatentabelle nicht erstellt, da diese nicht existiert: {e}")
         log_path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log")
         print("Beende Aufnahme Schleife\nLeite zum Ausschalten über")
         log_schreiben("Beende Aufnahme Schleife. Leite zum Ausschalten über")

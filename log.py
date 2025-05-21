@@ -5,7 +5,7 @@ from lora import send_lora
 
 def log_schreiben(text):
     """Schreibt den übergebenen Text in das Logfile."""
-    lokale_Zeit = datetime.now()
+    lokale_Zeit = datetime.now().strftime("%H:%M:%S")
     try:
         log_dateipfad = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","current_log")
     except Exception as e:

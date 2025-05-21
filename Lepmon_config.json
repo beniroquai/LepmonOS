@@ -23,6 +23,7 @@
         "latitude": 50.924009,
         "Pol": "N",
         "longitude": 11.584009,
-        "Block": "E"
+        "Block": "E",
+        "Orientation": "West"
     }
 }

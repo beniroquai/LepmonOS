@@ -43,6 +43,41 @@ def coordinates_in_list(latitude,longitude):
   return latitude_list, longitude_list
 
 
+def set_orientation():
+    orientation_old = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","GPS","Orientation")
+    selection = ["Nord","Nordost","Ost","Südost","Süd","Südwest","West","Nordwest"]
+    display_text("Bitte Blickrichtung", "der Kamera", "auswählen")
+    time.sleep(4)
+    display_text(f"Ausrichtung: {orientation_old}","bestätigen = rechts","neu = hoch/runter")
+    index = 0
+    orientation = orientation_old
+    turn_on_led("blau")
+    while True:
+        if button_pressed("oben"):
+            index = (index + 1) % len(selection)
+            orientation = selection[index]
+            display_text(f"Ausrichtung:",f"{orientation}","")
+ 
+        if button_pressed("unten"):
+            index = (index - 1) % len(selection)
+            orientation = selection[index]
+            display_text(f"Ausrichtung:",f"{orientation}","")
+            
+        if button_pressed("rechts"):
+            display_text(f"Ausrichtung:",f"{orientation}","ausgewählt")
+            time.sleep(2)
+            break
+            turn_off_led("blau")
+        time.sleep(.5)
+        
+    if orientation_old == orientation:
+        log_schreiben(f"Ausrichtung der Falle unverändert: {orientation}")
+    
+    else:
+        log_schreiben(f"Ausrichtung der Falle von {orientation_old} geändert zu {orientation}")
+        write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "GPS", "Orientation", orientation)
+        print(f"Orientierung der Falle geupdatet:{orientation}") 
+        
 
 def set_coordinates():
     try:
@@ -176,17 +211,10 @@ def set_coordinates():
 
         log_schreiben(f"neue Koordinaten wurden gespeichert")
         print("saved GPS coordinates in configuration file")
+        
+    set_orientation()        
 
                 
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
     set_coordinates()

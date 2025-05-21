@@ -91,12 +91,10 @@ for _ in range(100): #200
             time.sleep(.05)
         if not user:
             log_schreiben("Fokus unverändert")
-            
-
-        jetzt_local,_ = Zeit_aktualisieren()
-        jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
+        
         for i in range(5):
-            _,lokale_Zeit = Zeit_aktualisieren()    
+            jetzt_local,_ = Zeit_aktualisieren()
+            jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")  
             display_text("aktuelle Uhrzeit", jetzt_local_dt.strftime("%Y-%m-%d"),jetzt_local_dt.strftime("%H:%M:%S"))
             time.sleep(1)
 
@@ -181,6 +179,6 @@ for _ in range(100): #200
         break
     
     time.sleep(.05)
-if Menu_open:
+if not Menu_open:
     log_schreiben("Falle nicht mit lokalem User Interface parametrisiert")
-print("Continue with wait")    
+print("Continue")    

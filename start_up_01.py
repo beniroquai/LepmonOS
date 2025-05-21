@@ -8,6 +8,7 @@ import time
 from times import *
 from json_read_write import write_value_to_section
 from Lights import dim_down
+import subprocess
 
 try:
     from fram_direct import *
@@ -19,6 +20,13 @@ except Exception as e:
 
 dim_down()
 
+try:
+        subprocess.run(['sudo', 'date', "-s", jetzt_local])
+        print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
+    except Exception as e:
+        print(f"Fehler beim Stellen der RPi Uhr: {e}")
+        
+        
 write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", "0")
 try:
     write_fram(0x1010,"0")  
