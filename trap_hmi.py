@@ -94,9 +94,10 @@ for _ in range(100): #200
             
 
         jetzt_local,_ = Zeit_aktualisieren()
+        jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
         for i in range(5):
             _,lokale_Zeit = Zeit_aktualisieren()    
-            display_text("aktuelle Uhrzeit", jetzt_local,"")
+            display_text("aktuelle Uhrzeit", jetzt_local_dt.strftime("%Y-%m-%d"),jetzt_local_dt.strftime("%H:%M:%S"))
             time.sleep(1)
 
         display_text("Uhrzeit mit","rechter Taste", "neu stellen")  
@@ -106,6 +107,11 @@ for _ in range(100): #200
             if button_pressed("enter"):
                 log_schreiben("Menü zum aktualisieren der Uhrzeit geöffnet")
                 set_hwc()
+                for _ in range(5):
+                    jetzt_local,_ = Zeit_aktualisieren()
+                    jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S") 
+                    display_text("aktuelle Uhrzeit", jetzt_local_dt.strftime("%Y-%m-%d"),jetzt_local_dt.strftime("%H:%M:%S"))
+                    time.sleep(1)
                 log_schreiben("Menü zum aktualisieren der Uhrzeit geschlossen")
                 user = 1
                 break
@@ -152,7 +158,8 @@ for _ in range(100): #200
         LepiLED_start()
         snap_image("jpg","display",0,80)
         LepiLED_ende()
-        display_text("Kamera Test","erfolgreich","beendet")     
+        display_text("Kamera Test","erfolgreich","beendet")   
+        time.sleep(1)  
 
         total_space_gb, used_space_gb, free_space_gb, used_percent, free_percent = get_disk_space()
         display_text("USB Speicher", f"gesamt: {str(total_space_gb)} GB", f"frei:   {str(free_space_gb)} GB")

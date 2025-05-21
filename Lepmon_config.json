@@ -14,7 +14,7 @@
         "time_buffer": 30,
         "LepiLed_buffer": 60,
         "flash": 0.25,
-        "interval": 1,
+        "interval": 2,
         "dusk_treshold": 90,
         "initial_exposure": 80,
         "error_code":0
