@@ -9,7 +9,6 @@ import time
 import time
 import board
 import adafruit_ds3231
-import subprocess
 
 i2c = board.I2C()
 rtc = adafruit_ds3231.DS3231(i2c)
@@ -20,12 +19,7 @@ def Zeit_aktualisieren():
     dt = datetime(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
     jetzt_local = dt.strftime("%Y-%m-%d %H:%M:%S")
     lokale_Zeit = dt.strftime("%H:%M:%S")
-    try:
-        subprocess.run(['sudo', 'date', "-s", jetzt_local])
-        print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
-    except Exception as e:
-        print(f"Fehler beim Stellen der RPi Uhr: {e}")
-        
+    
     return jetzt_local, lokale_Zeit
 
 def berechne_zeitzone(latitude,longitude):

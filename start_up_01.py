@@ -23,7 +23,7 @@ dim_down()
 try:
         subprocess.run(['sudo', 'date', "-s", jetzt_local])
         print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
-    except Exception as e:
+except Exception as e:
         print(f"Fehler beim Stellen der RPi Uhr: {e}")
         
         

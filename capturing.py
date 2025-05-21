@@ -14,6 +14,7 @@ import shutil
 import os
 from datetime import timedelta
 from wait import wait 
+import subprocess
 
 wait()
 log_schreiben("Beginne Daten und Bildaufnahme")
@@ -77,6 +78,13 @@ while True:
 
         _,lokale_Zeit = Zeit_aktualisieren()
         
+        try:
+            subprocess.run(['sudo', 'date', "-s", jetzt_local])
+            print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
+        except Exception as e:
+            print(f"Fehler beim Stellen der RPi Uhr: {e}")
+            print(f"lokale Zeit: {lokale_Zeit}")
+            
         experiment_start_string = datetime.strptime(experiment_start_time, "%H:%M:%S")
         lokale_Zeit_string = datetime.strptime(lokale_Zeit, "%H:%M:%S")
         print(f"exp start string {experiment_start_string}")
@@ -152,7 +160,7 @@ while True:
             time.sleep(time_to_next_image)
 
 
-     elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time) or\
+    elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time) or\
          (experiment_end_time <= lokale_Zeit <= experiment_start_time) :
         try:
             checksum(csv_path, algorithm="md5")
