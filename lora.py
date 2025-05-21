@@ -21,4 +21,4 @@ def send_lora(main_message):
 
 
 if __name__ == "__main__":
-    send_lora()        
+    send_lora("Hier ist die Lepmon Falle")        

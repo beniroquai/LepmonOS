@@ -70,17 +70,4 @@ def erstelle_und_aktualisiere_csv(sensor_data):
 
 
 if __name__ == "__main__":
-    # Beispiel-Daten für sensor_data
-    sensor_data = {
-        'time_read': '00:44:27',
-        'LUX': 68.33,
-        'Temp_in': 38.88,
-        'bus_voltage': 12.56,
-        'shunt_voltage': 3.94,
-        'current': 607.91,
-        'power': 7698.12,
-        'Temp_out': 22.34,
-        'air_pressure': 992.29,
-        'air_humidity': 31.97
-    }
-    erstelle_und_aktualisiere_csv(sensor_data)
+   print("CSV Handler")

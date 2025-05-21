@@ -1,6 +1,12 @@
 from OLED_panel import display_text
 from log import log_schreiben
 from lora import send_lora
+from json_read_write import write_value_to_section
+try:
+    from fram_direct import *
+except ImportError:
+    print("FRAM module not found. Skipping FRAM related operations.")
+    pass
 
 Display_MESSAGES = {
     1: ("Kamera - Prüfe", "Kabelverbindung", "Fehler 1"),
@@ -61,6 +67,13 @@ def error_message(error_number, error_details):
         send_lora(f"Fehler {error_number}: {logging_text} {error_details}")  # Sende die Fehlermeldung per LoRa
     except Exception as e:
         pass
+    
+    try:
+        write_fram(0x1010, str(error_number))  # Schreibe die Fehlernummer in den FRAM
+    except Exception as e:  
+        print(f"Fehler beim Schreiben in den FRAM: {e}")
+        pass
+    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", error_number)
     
 def show_errors():
     """

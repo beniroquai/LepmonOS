@@ -6,22 +6,45 @@ from lora import send_lora
 from error_handling import *
 import time
 from times import *
+from json_read_write import write_value_to_section
+from Lights import dim_down
 
 try:
-    from FRAM_acess import *
+    from fram_direct import *
+    SN = read_fram(0x0110, 8)
+    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", SN)
+    print("Seriennummer in config geschrieben")
 except Exception as e:
      error_message(9,e)
-     
- 
+
+dim_down()
+
+write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", "0")
 try:
-    display_text("Willkommen", "Laden... 1/1", "")
+    write_fram(0x1010,"0")  
+    write_fram(0x1011,"0")    
+    write_fram(0x1012,"0") 
+    write_fram(0x1013,"0") 
+    print("Fehlercode in FRAM auf 0 gesetzt")
+except Exception as e:
+    error_message(9,e)
+    print("Fehlercode in FRAM nicht gelöscht")
+     
+     
+try:
+    display_text("Willkommen", "Laden... 1/2", "")
     print("Wilkommen message 1 in Display")
     time.sleep(3)
 except Exception as e:
-    print("fError displaying text on OLED: {e}")
+    print(f"Error displaying text on OLED: {e}")
     print("Display not working")
     
 send_lora("Starte Falle\nBerechne Zeiten für FRam")
+
+write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder", "")
+write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log", "")
+print("Konfigurationsdatei zurückgesetzt")
+time.sleep(2)
 
 erstelle_ordner()
 initialisiere_logfile()
@@ -50,8 +73,8 @@ send_lora(f"Zeit für Power on mit Attiny:  {power_on}\nZeit für Power off mit 
   
 
 try:
-    write_fram(8, str(power_on))
-    write_fram(17, str(power_off))
+    write_fram(0x0010, str(power_on))
+    write_fram(0x0040, str(power_off))
     time.sleep(1)
     print("start time and stop time written to FRAM")
     log_schreiben("Start & Stop Zeiten im FRam aktualisiert")

@@ -17,3 +17,7 @@ def log_schreiben(text):
             f.write(f"{lokale_Zeit}; {text}" + '\n')
     except Exception as e:
         send_lora(f"Fehler 10: Logging File nicht gefunden und Eintrag nicht erstellt. Prüfe USB Stick:{e}")
+
+
+if __name__ == "__main__":
+    print("Logfile wird geschrieben") 

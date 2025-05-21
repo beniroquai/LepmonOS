@@ -1,5 +1,0 @@
-# Ignoriere den Ordner __pycache__
-__pycache__/
-
-# Ignoriere alle Dateien, die mit ._ beginnen
-._*

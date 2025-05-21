@@ -59,3 +59,12 @@ def LepiLED_ende():
         time.sleep(flash / 100)
         LepiLed_pwm.ChangeDutyCycle(0)
     LepiLed_pwm.start(0)
+
+if __name__ == "__main__":
+    dim_up()
+    time.sleep(1)
+    dim_down()
+    time.sleep(1)
+    LepiLED_start()
+    time.sleep(1)  
+    LepiLED_ende()     

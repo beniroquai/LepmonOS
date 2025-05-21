@@ -1,9 +1,9 @@
 {
     "general": {
-        "serielnumber": "SN999999",
+        "serielnumber": "",
         "project_name": "Lepmon#",
-        "current_folder": "/media/Ento/0A80-304D/Lepmon#SN999999_TH_J_2024-02-03_T_1855",
-        "current_log": "/media/Ento/0A80-304D/Lepmon#SN999999_TH_J_2024-02-03_T_1855/Lepmon#SN999999_TH_J_2024-02-03_T_1855.log"
+        "current_folder": "",
+        "current_log": ""
     },
     "locality": {
         "country": "Germany",
@@ -16,7 +16,8 @@
         "flash": 0.25,
         "interval": 1,
         "dusk_treshold": 90,
-        "initial_exposure": 170
+        "initial_exposure": 80,
+        "error_code":0
     },
     "GPS": {
         "latitude": 50.924009,

@@ -21,7 +21,9 @@ def set_exposure(Belichtungszeit):
                 Belichtungszeit -= 10
             if Belichtungszeit <= 20:
                 Belichtungszeit -=1
-                display_text("Belichtungszeit:",f"{Belichtungszeit} ms","")         
+        if Belichtungszeit < 1:
+                Belichtungszeit = 1        
+        display_text("Belichtungszeit:",f"{Belichtungszeit} ms","")         
         time.sleep(.1)   
 
     return Belichtungszeit

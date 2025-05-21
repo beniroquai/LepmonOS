@@ -191,3 +191,4 @@ def set_coordinates():
 if __name__ == "__main__":
     set_coordinates()
     print("set coordinates")
+    display_text("Koordinaten","gesetzt","")

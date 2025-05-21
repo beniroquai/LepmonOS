@@ -124,4 +124,4 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
 
 if __name__ == "__main__":
     print("Starte Kamera...")
-    snap_image("jpg","log",0)                
+    snap_image("jpg","log",0,5)                
