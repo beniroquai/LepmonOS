@@ -63,6 +63,41 @@ def get_sun():
     # times, at which the sun passes the horizon
 
 
+def get_moon():
+    jetzt_local = datetime.now()
+    try:
+        latitude, longitude, _, _ = get_coordinates()
+    except Exception as e:
+        error_message(11, e)
+        return None, None, None, None
+
+    Zeitzone = berechne_zeitzone(latitude, longitude)
+    observer = ephem.Observer()
+    observer.lat = str(latitude)
+    observer.lon = str(longitude)
+
+    # Lokale Zeit in UTC umwandeln
+    jetzt_local_utc = jetzt_local.astimezone(pytz.utc)
+
+    # Mondaufgang und -untergang
+    moonrise = ephem.localtime(observer.next_rising(ephem.Moon(), start=jetzt_local_utc))
+    moonset = ephem.localtime(observer.next_setting(ephem.Moon(), start=jetzt_local_utc))
+
+    # Mondphase (0=Neumond, 0.5=Vollmond)
+    moon = ephem.Moon(jetzt_local_utc)
+    moon_phase = moon.phase  # Prozentuale Beleuchtung (0-100)
+
+    # Maximale Kulminationshöhe (Höhe bei Transit)
+    next_transit = observer.next_transit(moon, start=jetzt_local_utc)
+    observer.date = next_transit
+    moon.compute(observer)
+    max_altitude = moon.alt * 180.0 / ephem.pi  # in Grad
+
+    return moonrise, moonset, moon_phase, max_altitude
+
+# Beispiel-Aufruf:
+
+    
 def get_experiment_times():
     try:
         latitude, longitude,_,_ = (get_coordinates()) 
@@ -115,6 +150,11 @@ def get_times_power():
 
 if __name__ == "__main__":
     jetzt_local, lokale_Zeit = Zeit_aktualisieren()
+    moonrise, moonset, moon_phase, max_altitude = get_moon()
+    print(f"Mondaufgang: {moonrise}")
+    print(f"Monduntergang: {moonset}")
+    print(f"Mondphase: {moon_phase:.1f}%")
+    print(f"Maximale Kulminationshöhe: {max_altitude:.2f}°")
     print("Aktuelle Zeit:", jetzt_local)
     print("Aktuelle lokale Zeit:", lokale_Zeit)
           

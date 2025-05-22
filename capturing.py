@@ -14,7 +14,7 @@ import shutil
 import os
 from datetime import timedelta
 from wait import wait 
-import subprocess
+
 
 wait()
 log_schreiben("Beginne Daten und Bildaufnahme")
@@ -72,18 +72,12 @@ while True:
         if not Fang_begonnen:
             LepiLED_start()
             log_schreiben("LepiLED eingeschaltet")
+            log_schreiben("------------------")
             send_lora("LepiLED eingeschaltet")
             Fang_begonnen = True
             UV_active = True
 
-        _,lokale_Zeit = Zeit_aktualisieren()
-        
-        try:
-            subprocess.run(['sudo', 'date', "-s", jetzt_local])
-            print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
-        except Exception as e:
-            print(f"Fehler beim Stellen der RPi Uhr: {e}")
-            print(f"lokale Zeit: {lokale_Zeit}")
+        RPI_time()
             
         experiment_start_string = datetime.strptime(experiment_start_time, "%H:%M:%S")
         lokale_Zeit_string = datetime.strptime(lokale_Zeit, "%H:%M:%S")
@@ -168,6 +162,7 @@ while True:
             print(f"Checksumme der Metadatentabelle nicht erstellt, da diese nicht existiert: {e}")
         log_path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log")
         print("Beende Aufnahme Schleife\nLeite zum Ausschalten über")
+        log_schreiben("------------------")
         log_schreiben("Beende Aufnahme Schleife. Leite zum Ausschalten über")
         log_schreiben("Fahre Falle in 1 Minute herunter und startet neu")
         checksum(log_path, algorithm="md5")

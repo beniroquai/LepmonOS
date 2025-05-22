@@ -24,13 +24,13 @@ def set_location_code():
     while True:
         if level == "country":
             countries = list(data.keys())
-            display_text("Bitte Land wählen:",f"{countries[index]}","")
+            display_text("Bitte Land wählen:",f"{countries[index]}","rechts = bestätigen")
         elif level == "province":
             provinces = list(data[country].keys())
-            display_text("Bitte Provinz wählen:", provinces[index],"")
+            display_text("Bitte Provinz wählen:", provinces[index],"rechts = bestätigen")
         elif level == "city":
             codes = data[country][province]
-            display_text("Stadt wählen:", codes[index],"")
+            display_text(f"Stadt wählen: {codes[index]}", "rechts = bestätigen","Enter = beeenden")
 
         if button_pressed("oben"):
             if level == "country":
@@ -72,7 +72,7 @@ def set_location_code():
                 codes = data[country][province]
                 city_code = codes[index]
         if button_pressed("enter"):
-            display_text("Auswahl abgeschlossen","","")
+            display_text("Auswahl","abgeschlossen","")
             print(f"Ausgewählter Ort: {country} {province_code} {city_code}")
             time.sleep(3)
             display_text(f"{country}",f"{province}", f"{city_code}")

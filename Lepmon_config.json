@@ -25,5 +25,9 @@
         "longitude": 11.584009,
         "Block": "E",
         "Orientation": "West"
+    },
+    "software": {
+        "version": "2.0.1",
+        "date": "2025-05-22"
     }
 }

@@ -50,8 +50,7 @@ declare -x XDG_SESSION_PATH="/org/freedesktop/DisplayManager/Session0"
 declare -x XDG_SESSION_TYPE="wayland"
 declare -x XDG_VTNR="7"
 declare -x _JAVA_AWT_WM_NONREPARENTING="1"
-/usr/bin/python3 /home/Ento/LepmonOS/start_up_01.py
-/usr/bin/python3 /home/Ento/LepmonOS/start_up_02.py
+/usr/bin/python3 /home/Ento/LepmonOS/start_up.py
 source /home/Ento/Lepmon_env/bin/activate
 cd /home/Ento/LepmonOS/
 /usr/bin/python3 /home/Ento/LepmonOS/trap_hmi.py

@@ -6,6 +6,7 @@ import hashlib
 from error_handling import error_message
 import time
 from times import *
+import subprocess
 
 try:
     project_name = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","project_name")
@@ -126,6 +127,18 @@ def checksum(dateipfad, algorithm="md5"):
      error_message(11,e)
 
 
+def RPI_time():
+    """
+    Funktion um die Zeit des Raspberry Pi zu setzen
+    """
+    jetzt_local,_ = Zeit_aktualisieren()
+    try:
+        subprocess.run(['sudo', 'date', "-s", jetzt_local])
+        print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")
+    except Exception as e:
+        print(f"Fehler beim Stellen der RPi Uhr: {e}") 
+        
+        
 if __name__ == "__main__":
 
     print("test")

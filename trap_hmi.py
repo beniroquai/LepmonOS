@@ -51,7 +51,7 @@ def display_sensor_status_with_text(sensor_data, sensor_status):
 
 Menu_open = False
 turn_on_led("blau")
-display_text("Menü öffnen", "bitte rechte Taste", "drücken")
+display_text("Menü öffnen:", "bitte Enter drücken", "(rechts unten)")
 print("Eingabe Menü mit der Taste Enter ganz rechts öffnen")
 for _ in range(100): #200
     if button_pressed("enter"):
@@ -167,11 +167,11 @@ for _ in range(100): #200
         sunset = str(sunset)
         sunrise = str(sunrise)
         print(f"Anzeige Dämmerung:{sunset}")
-        print(f"Anzeige Dämmerung:{sunrise}")       
-        display_text("Sonnenuntergang",sunset,"")   
+        print(f"Anzeige Dämmerung:{sunrise}")
+        display_text("Sonnenuntergang", sunset[:10], sunset[11:19])
         time.sleep(3)
-        display_text("Sonnenaufgang",sunrise,"")   
-        time.sleep(3)   
+        display_text("Sonnenaufgang", sunrise[:10], sunrise[11:19])
+        time.sleep(3)
 
         display_text("Testlauf erfolgreich","bitte Deckel","schließen") 
         log_schreiben("Beende Systemcheck")

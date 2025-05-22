@@ -61,14 +61,14 @@ def set_orientation():
         if button_pressed("unten"):
             index = (index - 1) % len(selection)
             orientation = selection[index]
-            display_text(f"Ausrichtung:",f"{orientation}","")
+            display_text(f"Ausrichtung:",f"{orientation}","Rechts = bestätigen")
             
         if button_pressed("rechts"):
             display_text(f"Ausrichtung:",f"{orientation}","ausgewählt")
             time.sleep(2)
             break
             turn_off_led("blau")
-        time.sleep(.5)
+        time.sleep(.05)
         
     if orientation_old == orientation:
         log_schreiben(f"Ausrichtung der Falle unverändert: {orientation}")

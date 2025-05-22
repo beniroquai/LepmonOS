@@ -12,6 +12,8 @@ def erstelle_und_aktualisiere_csv(sensor_data):
         sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber")    
         path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder")
         orientation = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","GPS","Orientation")
+        Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
+        date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
     except Exception as e:
         error_message(11,e)
     csv_name = f"{os.path.basename(path)}.csv"
@@ -22,6 +24,7 @@ def erstelle_und_aktualisiere_csv(sensor_data):
     latitude, longitude, _, _ = get_coordinates()
 
     sunset, sunrise, _ = get_sun()
+    moonrise, moonset, moon_phase, max_altitude = get_moon()
     experiment_start_time, experiment_end_time, LepiLed_end_time,_,_ = get_experiment_times()
 
     ### Dateikopf
@@ -29,6 +32,9 @@ def erstelle_und_aktualisiere_csv(sensor_data):
         if not os.path.exists(csv_path):
             with open(csv_path, mode='w', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile, delimiter='\t')  # Setze den Tabulator als Trennzeichen
+                csv_writer.writerow(["#Software:",                  f"{Version} vom {date}"])                
+                csv_writer.writerow([])  
+                csv_writer.writerow(["#Experiment Parameter:",])            
                 csv_writer.writerow(["#UTC Time:",                  jetzt_local])
                 csv_writer.writerow(["#Longitude:",                 longitude]) 
                 csv_writer.writerow(["#Latitude:",                  latitude])
@@ -37,13 +43,18 @@ def erstelle_und_aktualisiere_csv(sensor_data):
                 csv_writer.writerow(["#Sonnenuntergang:",           sunset.strftime("%H:%M:%S")])
                 csv_writer.writerow(["#Sonnenaufgang:",             sunrise.strftime("%H:%M:%S")])
                 csv_writer.writerow([])
+                csv_writer.writerow(["#Mondaufgang:",               moonrise.strftime("%H:%M:%S")])
+                csv_writer.writerow(["#Monduntergang:",             moonset.strftime("%H:%M:%S")])
+                csv_writer.writerow(["#Mondphase:",                 round(moon_phase, 2)])
+                csv_writer.writerow(["#Maximale Kulminationshöhe:", round(max_altitude, 2)])
+                csv_writer.writerow([])
                 csv_writer.writerow(["#Beginn Monitoring:",         experiment_start_time])
                 csv_writer.writerow(["#Ende Monitoring:",           experiment_end_time])
                 csv_writer.writerow(["#Ausschalten der LepiLED:",   LepiLed_end_time])
                 csv_writer.writerow([])
                 csv_writer.writerow(["#Machine ID:",                sensor_id])
-                csv_writer.writerow(["#Dämmerungs Schwellenwert:",  dusk_treshold])
-                csv_writer.writerow(["#Aufnahme Intervall:",        interval])
+                csv_writer.writerow(["#Dämmerungs Schwellenwert:",  f"{dusk_treshold} lux"])
+                csv_writer.writerow(["#Aufnahme Intervall:",        f"{interval} min"])
                 csv_writer.writerow([])
                 csv_writer.writerow(["********************"])
                 csv_writer.writerow([])
