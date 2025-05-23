@@ -42,7 +42,7 @@ def focus():
     FokusFehler = 0
     maximum = 0
     while not button_pressed("enter"):
-        display_text(f"Schärfewert: {sharpness}",f"peak: {maximum} @ {Belichtung_max}",f"Exposure: {Belichtungszeit}")
+        display_text(f"Schärfewert: {sharpness}",f"peak: {maximum} @ {Belichtung_max}",f"Exposure: {Belichtungszeit} ms")
         dim_up()
         frame = get_frame(Belichtungszeit)
         dim_down()
@@ -54,7 +54,7 @@ def focus():
             
         if FokusFehler == 4:
             error_message(2,"Kamera mehrfach beim Fokussieren nicht initialisiert. Neustart empfohlen")
-            display_text("Warnung Kamera","ist überlastet","Falle neu starten")
+            display_text("Warnung: Kamera","ist überlastet","Falle neu starten")
             time.sleep(15)
             sys.exit()
 

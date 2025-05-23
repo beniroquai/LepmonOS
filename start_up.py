@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print(f"Error displaying text on OLED: {e}")
         print("Display not working")    
 
-    #Power_on_counter()
+    ram_counter(0x01F0)
     set_serial_number()
     delete_error_code()
 
@@ -39,21 +39,23 @@ if __name__ == "__main__":
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log", "")
     print("Konfigurationsdatei zurückgesetzt")
     
-    
-    time.sleep(2)
+
+    time.sleep(1)
     display_text("Willkommen", "Laden... 3/10", f"{Version}")
     time.sleep(1)
     display_text("Willkommen", "Laden... 4/10", f"{Version}")   
     time.sleep(1)
     display_text("Willkommen", "Laden... 5/10", f"{Version}")     
     time.sleep(1)
-    display_text("Willkommen", "Laden... 6/10", f"{Version}")        
+    display_text("Willkommen", "Laden... 6/10", f"{Version}")  
+    time.sleep(1)
+    display_text("Willkommen", "Laden... 7/10", f"{Version}")      
     erstelle_ordner()
     initialisiere_logfile()
     log_schreiben(f"Software- Version: {Version} vom {date}")
     log_schreiben("Experiment Parameter:")
 
-    display_text("Willkommen", "Laden... 7/10", f"{Version}")  
+    display_text("Willkommen", "Laden... 8/10", f"{Version}")  
     send_lora("Berechne Zeiten für Power Managament")
     sunset, sunrise, Zeitzone = get_sun()
 

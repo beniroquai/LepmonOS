@@ -56,7 +56,7 @@ def set_orientation():
         if button_pressed("oben"):
             index = (index + 1) % len(selection)
             orientation = selection[index]
-            display_text(f"Ausrichtung:",f"{orientation}","")
+            display_text(f"Ausrichtung:",f"{orientation}","Rechts = bestätigen")
  
         if button_pressed("unten"):
             index = (index - 1) % len(selection)
@@ -211,7 +211,8 @@ def set_coordinates():
 
         log_schreiben(f"neue Koordinaten wurden gespeichert")
         print("saved GPS coordinates in configuration file")
-        
+    
+    display_text("Koordinaten","gespeichert","")      
     set_orientation()        
 
                 
@@ -219,4 +220,4 @@ def set_coordinates():
 if __name__ == "__main__":
     set_coordinates()
     print("set coordinates")
-    display_text("Koordinaten","gesetzt","")
+    display_text("Koordinaten","gespeichert","")

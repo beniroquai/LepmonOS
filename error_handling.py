@@ -2,6 +2,7 @@ from OLED_panel import display_text
 from log import log_schreiben
 from lora import send_lora
 from json_read_write import write_value_to_section
+from fram_operations import write_fram, read_fram
 try:
     from fram_direct import *
 except ImportError:
@@ -40,6 +41,52 @@ Logging_MESSAGES = {
     13: ("Aktuelle Daten konnten nicht in Metadaten Tabelle geschrieben werden", "Fehler 13"),
 }
 
+ERROR_COUNTER_ADDR = {
+    1: 0x103A,
+    2: 0x104A,
+    3: 0x105A,
+    4: 0x106A,
+    5: 0x107A,
+    6: 0x108A,
+    7: 0x109A,
+    8: 0x10AA,
+    9: 0x10BA,
+    10: 0x10CA,
+    11: 0x10DA,
+    12: 0x10EA,
+    13: 0x10FA,
+}
+
+def increment_error_counter(error_number):
+    addr = ERROR_COUNTER_ADDR.get(error_number)
+    if addr is None:
+        return
+    try:
+        counter_bytes = read_fram_bytes(addr, 4)
+        if not counter_bytes or not isinstance(counter_bytes, (bytes, bytearray)):
+            counter = 1
+        else:
+            counter = int.from_bytes(counter_bytes, byteorder='big') + 1
+        write_fram_bytes(addr, counter.to_bytes(4, byteorder='big'))
+    except Exception as e:
+        print(f"Fehler beim Zählen des Fehlers {error_number}: {e}")
+
+def print_error_table():
+    print("\nAktuelle Fehlerhäufigkeiten:")
+    print(f"{'Fehler':<8} | {'Adresse':<8} | {'Anzahl':<8}")
+    print("-" * 32)
+    for err_num, addr in ERROR_COUNTER_ADDR.items():
+        try:
+            counter_bytes = read_fram_bytes(addr, 4)
+            if not counter_bytes or not isinstance(counter_bytes, (bytes, bytearray)):
+                count = 0
+            else:
+                count = int.from_bytes(counter_bytes, byteorder='big')
+        except Exception as e:
+            count = "?"
+        print(f"{err_num:<8} | {hex(addr):<8} | {count:<8}")
+        
+        
 # Separate function for Display_MESSAGES
 def get_display_message(error_number):
     return Display_MESSAGES.get(error_number, ("Unbekannter Fehler", "Keine Details verfügbar", f"Fehler {error_number}"))
@@ -74,6 +121,9 @@ def error_message(error_number, error_details):
         print(f"Fehler beim Schreiben in den FRAM: {e}")
         pass
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", error_number)
+    
+    increment_error_counter(error_number)
+    print_error_table()
     
 def show_errors():
     """

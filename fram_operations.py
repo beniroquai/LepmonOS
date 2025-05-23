@@ -1,5 +1,4 @@
 from json_read_write import *
-from error_handling import error_message
 from log import log_schreiben
 try:
     from fram_direct import *
@@ -7,29 +6,30 @@ except Exception as e:
      print(f"Fehler beim Importieren von fram_direct: {e}")  
      
      
-def Power_on_counter():
+def ram_counter(ramadresse):
     """
-    Liest eine 4-Byte-Zahl aus dem FRAM, erhöht sie um 1 und schreibt sie zurück.
+    Liest eine 4-Byte-Zahl aus dem FRAM an der angegebenen Adresse, erhöht sie um 1 und schreibt sie zurück.
     Gibt den Wert als vierstelligen String mit führenden Nullen aus.
     """
     try:
-        counter_bytes = read_fram(0x01F0, 4)
+        counter_bytes = read_fram_bytes(ramadresse, 4)
         # Falls leer, initialisiere mit 0
         if not counter_bytes or not isinstance(counter_bytes, (bytes, bytearray)):
             counter_int = 0
         else:
             counter_int = int.from_bytes(counter_bytes, byteorder='big')
         counter_int += 1
-        # Zurückschreiben als 4 Bytes
-        write_fram(0x01F0, counter_int.to_bytes(4, byteorder='big'))
+        # Zurückschreiben als 4 Bytes (jetzt korrekt als Bytes!)
+        write_fram_bytes(ramadresse, counter_int.to_bytes(4, byteorder='big'))
         # Ausgabe als vierstelliger String
         counter_str = f"{counter_int:04d}"
-        print(f"Counter als String: {counter_str}")
+        print(f"Counter an Adresse {hex(ramadresse)} als String: {counter_str}")
         return counter_str
     except Exception as e:
-        error_message(9, e)
-        print(f"Power on counter konnte nicht erhöht werden: {e}")
+        print(f"Counter an Adresse {hex(ramadresse)} konnte nicht erhöht werden: {e}")
         return None
+    
+    
 def set_serial_number():
     """
     Funktion um die Seriennummer zu setzen
@@ -39,7 +39,6 @@ def set_serial_number():
         write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", SN)
         print("Seriennummer in config geschrieben")
     except Exception as e:
-        error_message(9,e)
         print("Seriennummer konnte nicht gesetzt werden")
         pass
     
@@ -54,7 +53,6 @@ def delete_error_code():
         write_fram(0x1013,"0") 
         print("Fehlercode in FRAM auf 0 gesetzt")
     except Exception as e:
-        error_message(9,e)
         print("Fehlercode in FRAM nicht gelöscht")
         
     try:
@@ -76,7 +74,6 @@ def store_times_power(power_on, power_off):
         log_schreiben("Start & Stop Zeiten im FRam aktualisiert")
 
     except Exception as e:
-        error_message(9,"Fehler in der Kommunikation zwischen Raspberry Pi und Fram Modul. Zeiten für An und Ausschalten der Falle nicht aktualisiert.")
         time.sleep(5)
         
 def check_version():
@@ -95,3 +92,8 @@ def check_version():
     if date_fram != date_json:
         write_fram(0x0140, date_json)
         print("Datum in FRAM aktualisiert")
+        
+        
+if __name__ == "__main__":
+    ram_counter(0x01F0)
+         

@@ -83,8 +83,8 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
         Kamera_Fehlerserie = 0
 
     if frame is None and mode == "display":
-        #display_text("Kamera Fehler5","bitte USB","Kabel prüfen")
         error_message(1,e)
+        time.sleep(10)
 
     if frame is None and mode == "log": 
         Status_Kamera = 0   

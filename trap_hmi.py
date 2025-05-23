@@ -52,7 +52,7 @@ def display_sensor_status_with_text(sensor_data, sensor_status):
 Menu_open = False
 turn_on_led("blau")
 display_text("Menü öffnen:", "bitte Enter drücken", "(rechts unten)")
-print("Eingabe Menü mit der Taste Enter ganz rechts öffnen")
+print("Eingabe Menü mit der Taste Enter ganz rechts unten öffnen")
 for _ in range(100): #200
     if button_pressed("enter"):
         Menu_open =  True
@@ -156,7 +156,7 @@ for _ in range(100): #200
         LepiLED_start()
         snap_image("jpg","display",0,80)
         LepiLED_ende()
-        display_text("Kamera Test","erfolgreich","beendet")   
+        display_text("Kamera Test","beendet","")   
         time.sleep(1)  
 
         total_space_gb, used_space_gb, free_space_gb, used_percent, free_percent = get_disk_space()
@@ -173,7 +173,7 @@ for _ in range(100): #200
         display_text("Sonnenaufgang", sunrise[:10], sunrise[11:19])
         time.sleep(3)
 
-        display_text("Testlauf erfolgreich","bitte Deckel","schließen") 
+        display_text("Testlauf beendet","bitte Deckel","schließen") 
         log_schreiben("Beende Systemcheck")
         time.sleep(3)
         break
