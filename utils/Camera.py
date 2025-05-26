@@ -1,4 +1,3 @@
-from vimba import *
 from Lights import dim_up, dim_down
 from json_read_write import get_value_from_section
 import time
@@ -10,7 +9,6 @@ from log import log_schreiben
 from GPIO_Setup import button_pressed
 from sensor_data import read_sensor_data
 from error_handling import error_message
-IS_IMSWITCH = True
 try:
     project_name = get_value_from_section("./config/Lepmon_config.json","general","project_name")
     sensor_id = get_value_from_section("./config/Lepmon_config.json","general","serielnumber")
@@ -19,9 +17,20 @@ try:
 except Exception as e:
     error_message(11,e)
 
-         
+try:
+    from vimba import *
+    IS_VIMBA = True
+    IS_IMSWITCH = False
+except ImportError as e:
+    IS_IMSWITCH = True
+    IS_VIMBA = False
+    error_message(11,e)
+    print("Vimba nicht installiert oder nicht verfügbar. Verwende IMSwitch.")
 
 def get_frame_vimba(Exposure):
+    if not IS_VIMBA:
+        error_message(11, "Vimba ist nicht verfügbar. Bitte installieren Sie es oder verwenden Sie IMSwitch.")
+        return None
     with Vimba.get_instance() as vimba:
         cams = vimba.get_all_cameras()
 

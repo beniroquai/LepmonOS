@@ -40,6 +40,9 @@ RUN mkdir -p /home/pi/LepmonOS
 RUN date
 COPY . /home/pi/LepmonOS
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  sudo
+
 # Copy startup script to /opt and make it executable.
 COPY LepmonOS_start.sh /opt/LepmonOS_start.sh
 RUN chmod +x /home/pi/LepmonOS/LepmonOS_start.sh
