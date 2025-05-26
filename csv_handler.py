@@ -4,6 +4,7 @@ from json_read_write import get_value_from_section
 from datetime import datetime
 from times import *
 from error_handling import error_message
+from fram_operations import read_fram
 
 def erstelle_und_aktualisiere_csv(sensor_data):
     try:
@@ -11,9 +12,9 @@ def erstelle_und_aktualisiere_csv(sensor_data):
         interval = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "interval")
         sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber")    
         path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder")
-        orientation = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","GPS","Orientation")
         Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
         date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
+        Fallenversion = read_fram(0x0130,9)
     except Exception as e:
         error_message(11,e)
     csv_name = f"{os.path.basename(path)}.csv"
@@ -32,13 +33,13 @@ def erstelle_und_aktualisiere_csv(sensor_data):
         if not os.path.exists(csv_path):
             with open(csv_path, mode='w', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile, delimiter='\t')  # Setze den Tabulator als Trennzeichen
-                csv_writer.writerow(["#Software:",                  f"{Version} vom {date}"])                
+                csv_writer.writerow(["#Software:",                  f"{Version} vom {date}"])    
+                csv_writer.writerow(["Fallenversion:",              Fallenversion])            
                 csv_writer.writerow([])  
                 csv_writer.writerow(["#Experiment Parameter:",])            
                 csv_writer.writerow(["#UTC Time:",                  jetzt_local])
                 csv_writer.writerow(["#Longitude:",                 longitude]) 
                 csv_writer.writerow(["#Latitude:",                  latitude])
-                csv_writer.writerow(["#Ausrichtung:", 				orientation])
                 csv_writer.writerow([])
                 csv_writer.writerow(["#Sonnenuntergang:",           sunset.strftime("%H:%M:%S")])
                 csv_writer.writerow(["#Sonnenaufgang:",             sunrise.strftime("%H:%M:%S")])

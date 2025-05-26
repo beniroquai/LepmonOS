@@ -6,6 +6,7 @@ import cv2
 from error_handling import error_message
 import sys
 from Lights import *
+from end import trap_shutdown
 
 
 def set_exposure(Belichtungszeit):
@@ -35,7 +36,7 @@ def focus():
     maximum = 0
     print("Fokusieren:\n"
           "Falle berechnet den schärsten Fokus, bassierend auf der 'Variance of Laplacian'\n" 
-          "siehe https://pyimagesearch.com/2015/09/07/blur-detection-with-opencv/\n\n"
+          "siehe https://pyimagesearch.com/2015/09/07/blur-detection-with-opencv/\n"
           "Fokusring drehen, bis der Schärfewert im Display sein Maximum erreicht hat")
     display_text("fokussieren","bis Anzeigewert","Maximum erreicht")
     time.sleep(5)
@@ -50,13 +51,15 @@ def focus():
             FokusFehler = 0
         elif frame is None:
             FokusFehler += 1
-            ("Fokussier fehler")
+            print("Fokussier fehler")
             
         if FokusFehler == 4:
-            error_message(2,"Kamera mehrfach beim Fokussieren nicht initialisiert. Neustart empfohlen")
-            display_text("Warnung: Kamera","ist überlastet","Falle neu starten")
-            time.sleep(15)
-            sys.exit()
+            error_message(2,"Kamera mehrfach beim Fokussieren nicht initialisiert. Falle startet neu")
+            display_text("Kamera überlastet","fokusieren nicht","beendet")
+            time.sleep(3)
+            display_text("nach Neustart","mit Fokusieren","fortfahren")
+            time.sleep(3)
+            trap_shutdown(5)
 
         print("analyse")
 

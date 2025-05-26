@@ -47,10 +47,7 @@ def delete_error_code():
     Funktion um den Error Code zu löschen
     """
     try:
-        write_fram(0x1010,"0")  
-        write_fram(0x1011,"0")    
-        write_fram(0x1012,"0") 
-        write_fram(0x1013,"0") 
+        write_fram_bytes(0x1010, (0).to_bytes(4, byteorder='big'))
         print("Fehlercode in FRAM auf 0 gesetzt")
     except Exception as e:
         print("Fehlercode in FRAM nicht gelöscht")
@@ -96,4 +93,3 @@ def check_version():
         
 if __name__ == "__main__":
     ram_counter(0x01F0)
-         

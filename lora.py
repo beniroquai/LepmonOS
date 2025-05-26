@@ -10,7 +10,7 @@ except Exception as e:
 def send_lora(main_message):
     try:
         sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","serielnumber")
-        message = f"{sensor_id} start of message\n{main_message}\n{sensor_id} end of message"
+        message = f"{sensor_id} start of message\n{main_message}\n{sensor_id} end of message\n "
     except Exception as e:
         print("Fehler im senden der Nachricht")
     try:

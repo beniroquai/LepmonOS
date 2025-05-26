@@ -42,19 +42,19 @@ Logging_MESSAGES = {
 }
 
 ERROR_COUNTER_ADDR = {
-    1: 0x103A,
-    2: 0x104A,
-    3: 0x105A,
-    4: 0x106A,
-    5: 0x107A,
-    6: 0x108A,
-    7: 0x109A,
-    8: 0x10AA,
-    9: 0x10BA,
-    10: 0x10CA,
-    11: 0x10DA,
-    12: 0x10EA,
-    13: 0x10FA,
+    1: 0x0840,
+    2: 0x0860,
+    3: 0x0880,
+    4: 0x08A0,
+    5: 0x08C0,
+    6: 0x08E0,
+    7: 0x0900,
+    8: 0x0920,
+    9: 0x0940,
+    10: 0x0960,
+    11: 0x0980,
+    12: 0x09A0,
+    13: 0x09C0,
 }
 
 def increment_error_counter(error_number):
@@ -116,7 +116,7 @@ def error_message(error_number, error_details):
         pass
     
     try:
-        write_fram(0x1010, str(error_number))  # Schreibe die Fehlernummer in den FRAM
+        write_fram_bytes(0x0810, error_number.to_bytes(4, byteorder='big'))  # Schreibe die Fehlernummer in den FRAM
     except Exception as e:  
         print(f"Fehler beim Schreiben in den FRAM: {e}")
         pass

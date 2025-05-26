@@ -56,10 +56,3 @@ cd /home/Ento/LepmonOS/
 /usr/bin/python3 /home/Ento/LepmonOS/trap_hmi.py
 /usr/bin/python3 /home/Ento/LepmonOS/capturing.py
 /usr/bin/python3 /home/Ento/LepmonOS/end.py
-
-
-
-
-#/usr/bin/python3 /home/Ento/Lepmon_skript/LED_002.py
-#/usr/bin/python3 /home/Ento/Lepmon_skript/Lepmon.py
-#/usr/bin/python3 /home/Ento/Lepmon_skript/LED_003.py

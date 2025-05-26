@@ -30,7 +30,7 @@ def set_location_code():
             display_text("Bitte Provinz wählen:", provinces[index],"rechts = bestätigen")
         elif level == "city":
             codes = data[country][province]
-            display_text(f"Stadt wählen: {codes[index]}", "rechts = bestätigen","Enter = beeenden")
+            display_text(f"Stadt wählen: {codes[index]}", "1. rechts = bestätigen","2. Enter = beeenden")
 
         if button_pressed("oben"):
             if level == "country":

@@ -14,6 +14,8 @@ import shutil
 import os
 from datetime import timedelta
 from wait import wait 
+from fram_operations import *
+import struct
 
 
 wait()
@@ -27,8 +29,17 @@ try:
 except Exception as e:
     error_message(3,e)
 
+try:
+    send_lora(f"USB Speicher gesamt: {total_space_gb} GB\nUSB Speicher belegt: {used_space_gb} GB)\nUSB Speicher frei:   {free_space_gb} GB")
+except:
+    print(f"USB Speicherdaten nicht gesendet")
+    pass
 
-
+try: 
+    write_fram_bytes(0x0390, struct.pack('f', free_space_gb))
+    print(f"freien Speicher im Ram gemerkt:{free_space_gb}")
+except Exception as e:
+    print(f"Fehler beim Schreiben des freien Speichers in den RAM: {e}")
 
 experiment_start_time, experiment_end_time, LepiLed_end_time,_ ,_ = get_experiment_times()
 _, sunrise, _ = get_sun()
@@ -93,6 +104,7 @@ while True:
             if UV_active :
                 LepiLED_ende()
                 log_schreiben("LepiLED ausgeschaltet")
+                send_lora("LepiLED ausgeschaltet")
                 UV_active = False  
         
         code, current_image, Status_Kamera, power_on, Kamera_Fehlerserie = snap_image("tiff","log",Kamera_Fehlerserie,Exposure)
@@ -163,9 +175,16 @@ while True:
         log_path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log")
         print("Beende Aufnahme Schleife\nLeite zum Ausschalten über")
         log_schreiben("------------------")
+        _, _, free_space_gb_after_run, _, _ = get_disk_space()
+        free_space_before_run = read_fram(0x0390,6)
+        size = free_space_before_run-free_space_gb_after_run
+        log_schreiben(f"in dieser Nacht wurden {size} GB an Daten generiert")
+        send_lora(f"in dieser Nacht wurden {size} GB an Daten generiert")
         log_schreiben("Beende Aufnahme Schleife. Leite zum Ausschalten über")
         log_schreiben("Fahre Falle in 1 Minute herunter und startet neu")
         checksum(log_path, algorithm="md5")
+
+        
         break
     
     

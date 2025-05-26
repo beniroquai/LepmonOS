@@ -7,6 +7,8 @@ from log import log_schreiben
 from error_handling import error_message
 import subprocess
 import board
+from service import RPI_time
+from end import trap_shutdown
 
 i2c = board.I2C()
 rtc = adafruit_ds3231.DS3231(i2c)
@@ -107,38 +109,50 @@ def set_hwc():
     # Grenzen prüfen
     if not (2000 <= jahr <= 2099):
             msg = f"ungüliges Jahr {jahr}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
-            display_text(msg,"bitte neustarten","")            
+            error_message(8, f"{msg} --  Neustart erwartet")
+            display_text(msg,"bitte neustarten","")   
+            time.sleep(3)         
+            trap_shutdown(5)
             raise ValueError(f"Jahr {jahr} außerhalb des gültigen Bereichs (2000–2099)")
             return        
     if not (1 <= monat <= 12):
             msg = f"ungüliger Monat {monat}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
+            error_message(8, f"{msg} --  Neustart erwartet")
             display_text(msg,"bitte neustarten","")
+            time.sleep(3)    
+            trap_shutdown(5)
             raise ValueError(f"Monat {monat} ist ungültig")
             return
     if not (1 <= tag <= 31):  # Optional: Du kannst hier mit Kalenderlogik genauer sein
             msg = f"ungüliger Tag {tag}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
+            error_message(8, f"{msg} --  Neustart erwartet")
             display_text(msg,"bitte neustarten","")
+            time.sleep(3)    
+            trap_shutdown(5)
             raise ValueError(f"Tag {tag} ist ungültig")
             return
     if not (0 <= stunde <= 23):
             msg = f"ungülige Stunde {stunde}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
+            error_message(8, f"{msg} --  Neustart erwartet")
             display_text(msg,"bitte neustarten","")
+            time.sleep(3)   
+            trap_shutdown(5) 
             raise ValueError(f"Stunde {stunde} ist ungültig")
             return    
     if not (0 <= minute <= 59):
             msg = f"ungülige Minute {minute}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
+            error_message(8, f"{msg} --  Neustart erwartet")
             display_text(msg,"bitte neustarten","")
+            time.sleep(3)    
+            trap_shutdown(5)
             raise ValueError(f"Minute {minute} ist ungültig")
             return            
     if not (0 <= sekunde <= 59):
-            msg = f"ungülige Sekunde {Sekunde}"
-            error_message(8, f"{msg} -- manueller Neustart erwartet")
+            msg = f"ungültige Sekunde {sekunde}"
+            error_message(8, f"{msg} --  Neustart erwartet")
             display_text(msg,"bitte neustarten","")
+            time.sleep(3)    
+            trap_shutdown(5)
             raise ValueError(f"Sekunde {sekunde} ist ungültig")
             return
 
@@ -158,6 +172,8 @@ def set_hwc():
 
         print("RTC wird gesetzt auf Systemzeit:", rtc_time)
         rtc.datetime = rtc_time
+        RPI_time()
+        log_schreiben(f"Hardware Uhrzeit gesetzt auf: {rtc_time.tm_year}-{rtc_time.tm_mon:02d}-{rtc_time.tm_mday:02d} {rtc_time.tm_hour:02d}:{rtc_time.tm_min:02d}:{rtc_time.tm_sec:02d}")
 
     except Exception as e:
         error_message(8, e)

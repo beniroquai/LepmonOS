@@ -23,11 +23,10 @@
         "latitude": 50.924009,
         "Pol": "N",
         "longitude": 11.584009,
-        "Block": "E",
-        "Orientation": "West"
+        "Block": "E"
     },
     "software": {
-        "version": "2.0.2",
-        "date": "2025-05-23"
+        "version": "2.0.3",
+        "date": "2025-05-26"
     }
 }

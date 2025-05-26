@@ -83,7 +83,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
         Kamera_Fehlerserie = 0
 
     if frame is None and mode == "display":
-        error_message(1,e)
+        error_message(1,"Fehler beim Abrufen des Frames")
         time.sleep(10)
 
     if frame is None and mode == "log": 
@@ -115,11 +115,9 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
             log_schreiben(f"Bild gespeichert: {dateipfad}")             
 
     except Exception as e:
-        error_message(1,e)
-        Status_Kamera = 0   
+        Status_Kamera = 0
 
-    return code, dateipfad, Status_Kamera, power_on, Kamera_Fehlerserie   
-
+    return code, dateipfad, Status_Kamera, power_on, Kamera_Fehlerserie
 
 
 if __name__ == "__main__":

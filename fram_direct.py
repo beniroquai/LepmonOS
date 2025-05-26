@@ -1,6 +1,5 @@
 import smbus2
 import time
-from fram_memory_map import FRAM_MEMORY_MAP, get_memory_section  # Import der Map & Funktion
 
 I2C_BUS = 1
 FRAM_ADDRESS = 0x50  # I2C-Adresse des FM24CL64B

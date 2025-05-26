@@ -14,6 +14,9 @@ from Lights import *
 from find_focus import focus
 from site_selection import set_location_code
 import os
+from fram_operations import *
+from updater import *
+from end import trap_shutdown
 
 latitude, longitude,_,_ = (get_coordinates())
     
@@ -53,12 +56,13 @@ Menu_open = False
 turn_on_led("blau")
 display_text("Menü öffnen:", "bitte Enter drücken", "(rechts unten)")
 print("Eingabe Menü mit der Taste Enter ganz rechts unten öffnen")
-for _ in range(100): #200
+for _ in range(100):
     if button_pressed("enter"):
         Menu_open =  True
         print("Enter Gedrückt")
         display_text("Eingabe Menü", "geöffnet", "")
         log_schreiben("Lokales User Interface der Falle wurde geöffnet")
+        ram_counter(0x0330)
 
         user = 0
         for _ in range(75):
@@ -76,18 +80,18 @@ for _ in range(100): #200
                 time.sleep(3)
                 Neustart = set_location_code()
                 if not Neustart:
-                    log_schreiben("Menü zum Ändern der Provinz und Stadtkürzel beendet. Es wurden keine Änderungen eingegeben. Fahre fort")           
+                    log_schreiben("Menü zum Ändern der Provinz und Stadtkürzel beendet. Es wurden keine Änderungen eingegeben. Fahre fort")   
+                    display_text("Code unverändert","fahre fort","")
+                    time.sleep(2)        
                 if  Neustart:
                     log_schreiben("Menü zum Ändern der Provinz und Stadtkürzel beendet. Es wurden  Änderungen eingegeben. starte neu zum Übernehmen")
-                    t = 5
-                    for _ in range(5):
-                        display_text("Code geändert","Falle startet neu",f"fürs Anwenden {t}")
-                        t -=1
-                        time.sleep(1)
-                    display_text("","","")    
-                    os.system('sudo reboot')
-                              
-                              
+                    display_text("Code geändert","Falle startet neu","fürs Anwenden")
+                    trap_shutdown(5)
+                    
+            if button_pressed("oben"):
+                print("Oben gedrückt. Öffne Update Menü")
+                update()
+
             time.sleep(.05)
         if not user:
             log_schreiben("Fokus unverändert")
@@ -98,7 +102,7 @@ for _ in range(100): #200
             display_text("aktuelle Uhrzeit", jetzt_local_dt.strftime("%Y-%m-%d"),jetzt_local_dt.strftime("%H:%M:%S"))
             time.sleep(1)
 
-        display_text("Uhrzeit mit","rechter Taste", "neu stellen")  
+        display_text("Uhrzeit mit","Enter Taste", "neu stellen")  
 
         user = 0
         for _ in range(100):
@@ -123,8 +127,8 @@ for _ in range(100): #200
 
         display_text("Koordinaten",f"Lat: {latitude}", f"Long: {longitude}")  
         time.sleep(5)
-        display_text("Koordinaten mit","rechter Taste", "neu stellen")      
-        
+        display_text("Koordinaten mit","Enter Taste", "neu stellen")      
+
         user = 0
         for _ in range(50):
             if button_pressed("enter"):
