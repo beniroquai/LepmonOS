@@ -176,10 +176,15 @@ while True:
         print("Beende Aufnahme Schleife\nLeite zum Ausschalten über")
         log_schreiben("------------------")
         _, _, free_space_gb_after_run, _, _ = get_disk_space()
-        free_space_before_run = read_fram(0x0390,6)
-        size = free_space_before_run-free_space_gb_after_run
-        log_schreiben(f"in dieser Nacht wurden {size} GB an Daten generiert")
-        send_lora(f"in dieser Nacht wurden {size} GB an Daten generiert")
+        try:
+            free_space_before_run = read_fram(0x0390,6)
+            size = free_space_before_run-free_space_gb_after_run
+            log_schreiben(f"in dieser Nacht wurden {size} GB an Daten generiert")
+            send_lora(f"in dieser Nacht wurden {size} GB an Daten generiert")
+        except Exception as e:
+            print("Kein Ram vorhanden. verbrauchter Speicher nicht gemessen")    
+            log_schreiben("Kein Ram vorhanden. verbrauchter Speicher nicht gemessen")
+            pass
         log_schreiben("Beende Aufnahme Schleife. Leite zum Ausschalten über")
         log_schreiben("Fahre Falle in 1 Minute herunter und startet neu")
         checksum(log_path, algorithm="md5")

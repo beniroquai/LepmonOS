@@ -71,7 +71,10 @@ def get_new_version_from_stick():
     
 def get_current_version():
     # Lies die aktuelle Version aus dem FRAM (als String)
-    current_version = read_fram(0x0520, 5)
+    try:
+        current_version = read_fram(0x0520, 5)
+    except Exception as e:
+        current_version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
     if current_version:
         return current_version.strip()
     return None

@@ -1,4 +1,4 @@
-from GPIO_Setup import button_pressed
+from GPIO_Setup import *
 from OLED_panel import display_text
 import json
 import time
@@ -22,6 +22,7 @@ def set_location_code():
     province = None
     city_code = None
     while True:
+        turn_on_led("blau")
         if level == "country":
             countries = list(data.keys())
             display_text("Bitte Land wählen:",f"{countries[index]}","rechts = bestätigen")

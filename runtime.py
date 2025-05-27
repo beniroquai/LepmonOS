@@ -1,6 +1,8 @@
 import time
 from fram_operations import*
 
+
+
 def get_unix_time():
     return int(time.time())
 
@@ -23,7 +25,8 @@ def on_start():
     try:
         last_start = read_runtime_start()
         total_runtime = read_total_runtime()
-    except Exception:
+    except Exception as e:
+        print("Fehler beim Lesen der Laufzeitdaten:", e)
         last_start = 0
         total_runtime = 0
 
@@ -32,18 +35,31 @@ def on_start():
         # Zeit seit letztem Start addieren
         diff = now - last_start
         total_runtime += diff
-        write_total_runtime(total_runtime)
-        print(f"Unsauberer Shutdown erkannt, {diff} Sekunden nachgetragen.")
+        try:
+            write_total_runtime(total_runtime)
+            print(f"Unsauberer Shutdown erkannt, {diff} Sekunden nachgetragen.")
+        except Exception as e:
+            print("Fehler beim Schreiben der Laufzeit:", e)
+            total_runtime = 0
 
     # Schreibe neuen Startzeitpunkt
-    write_runtime_start()
-    print(f"Startzeitpunkt {now} gespeichert.")
+    try:
+        write_runtime_start()
+        print(f"Startzeitpunkt {now} gespeichert.")
+    except Exception as e:
+        print("Fehler beim Schreiben des Startzeitpunkts:", e)
+
 
 def on_shutdown():
     now = get_unix_time()
-    last_start = read_runtime_start()
-    total_runtime = read_total_runtime()
-    if last_start > 0 and last_start < now:
+    try:
+        last_start = read_runtime_start()
+        total_runtime = read_total_runtime()
+    except Exception as e:
+        print("Fehler beim Lesen der Laufzeitdaten:", e)
+        last_start = None
+        total_runtime = None
+    if last_start is not None and last_start > 0 and last_start < now:
         diff = now - last_start
         total_runtime += diff
         write_total_runtime(total_runtime)

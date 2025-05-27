@@ -14,11 +14,16 @@ def erstelle_und_aktualisiere_csv(sensor_data):
         path = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder")
         Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
         date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
-        Fallenversion = read_fram(0x0130,9)
     except Exception as e:
         error_message(11,e)
     csv_name = f"{os.path.basename(path)}.csv"
     csv_path = os.path.join(path, csv_name)
+    
+    try:
+        Fallenversion = read_fram(0x0130,9)
+    except Exception as e:
+        Fallenversion = get_value_from_section("/home/Ento/serial_number.json", "general", "Fallenversion")
+    
 
     ### Metadata
     jetzt_local, lokale_Zeit = Zeit_aktualisieren()

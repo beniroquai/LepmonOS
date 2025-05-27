@@ -1,5 +1,6 @@
 from json_read_write import *
 from log import log_schreiben
+from json_read_write import get_value_from_section, write_value_to_section
 try:
     from fram_direct import *
 except Exception as e:
@@ -39,8 +40,12 @@ def set_serial_number():
         write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", SN)
         print("Seriennummer in config geschrieben")
     except Exception as e:
-        print("Seriennummer konnte nicht gesetzt werden")
-        pass
+        try:
+            SN = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
+            print("Seriennummer aus JSON gelesen")
+        except Exception as e:
+            print("Seriennummer konnte nicht gesetzt werden")
+            pass
     
 def delete_error_code():
     """
@@ -80,13 +85,19 @@ def check_version():
     Version_json = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
     date_json = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date")
     print(f"Software- Version: {Version_json} vom {date_json}")
-    
-    Version_fram = read_fram(0x0130, 8)
-    date_fram = read_fram(0x0140, 8)
-    if Version_fram != Version_json:
+    try:
+        Version_fram = read_fram(0x0130, 8)
+        date_fram = read_fram(0x0140, 8)
+    except Exception as e:
+        print(f"Fehler beim Lesen der Version/Daten aus dem FRAM: {e}")
+        Version_fram = None
+        date_fram = None
+        return
+
+    if Version_fram is not None and Version_json != Version_fram:
         write_fram(0x0130, Version_json)
         print("Version in FRAM aktualisiert")
-    if date_fram != date_json:
+    if Version_fram is not None and date_fram != date_json:
         write_fram(0x0140, date_json)
         print("Datum in FRAM aktualisiert")
         

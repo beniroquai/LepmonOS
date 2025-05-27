@@ -2,7 +2,8 @@ from OLED_panel import display_text
 from log import log_schreiben
 from lora import send_lora
 from json_read_write import write_value_to_section
-from fram_operations import write_fram, read_fram
+from GPIO_Setup import turn_on_led, turn_off_led
+
 try:
     from fram_direct import *
 except ImportError:
@@ -100,6 +101,7 @@ def error_message(error_number, error_details):
     Zeigt die Fehlermeldung auf dem Display an, loggt sie und sendet sie per LoRa.
     :param error_number: Fehlernummer (int)
     """
+    turn_on_led("rot")  # Schalte die rote LED ein
     text1, text2, text3 = get_display_message(error_number)  # Get display message
     logging_text, _ = get_log_message(error_number)  # Get log message (only need the first element)
     try:
@@ -121,9 +123,13 @@ def error_message(error_number, error_details):
         print(f"Fehler beim Schreiben in den FRAM: {e}")
         pass
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", error_number)
-    
-    increment_error_counter(error_number)
-    print_error_table()
+    try:
+        increment_error_counter(error_number)
+        print_error_table()
+    except Exception as e:
+        print("Ram nicht verfügbar. Fehlerzähler nicht erhöht:", e)    
+    time.sleep(2)  # Kurze Pause, damit die Fehlermeldung sichtbar bleibt
+    turn_off_led("rot")
     
 def show_errors():
     """

@@ -7,9 +7,11 @@ from error_handling import error_message
 import sys
 from Lights import *
 from end import trap_shutdown
+from GPIO_Setup import turn_on_led, turn_off_led
 
 
 def set_exposure(Belichtungszeit):
+    turn_on_led("blau")
     for _ in range(25):
         if button_pressed("oben"):
             if Belichtungszeit >20:
@@ -24,8 +26,9 @@ def set_exposure(Belichtungszeit):
                 Belichtungszeit -=1
         if Belichtungszeit < 1:
                 Belichtungszeit = 1        
-        display_text("Belichtungszeit:",f"{Belichtungszeit} ms","")         
+        display_text("Belichtungszeit:",f"{Belichtungszeit} ms","jetzt fokusieren")         
         time.sleep(.1)   
+    turn_off_led("blau")
 
     return Belichtungszeit
 
@@ -42,8 +45,9 @@ def focus():
     time.sleep(5)
     FokusFehler = 0
     maximum = 0
+    turn_on_led("gelb")
     while not button_pressed("enter"):
-        display_text(f"Schärfewert: {sharpness}",f"peak: {maximum} @ {Belichtung_max}",f"Exposure: {Belichtungszeit} ms")
+        display_text(f"Schärfewert: {sharpness}",f"Exposure: {Belichtungszeit} ms",f"peak: {maximum} @ {Belichtung_max}")
         dim_up()
         frame = get_frame(Belichtungszeit)
         dim_down()
@@ -66,10 +70,11 @@ def focus():
         if FokusFehler == 0:
             if frame is not None:
                 display_text(f"Schärfewert: {sharpness}",f"peak: {maximum} @ {Belichtung_max}",f"set exposure {Belichtungszeit}")
-                Belichtungszeit = set_exposure(Belichtungszeit)
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
                 sharpness = round(cv2.Laplacian(gray, cv2.CV_64F).var(),0)
-
+                turn_off_led("gelb")
+                Belichtungszeit = set_exposure(Belichtungszeit)
+                turn_on_led("gelb")
                 if sharpness > maximum:
                     maximum = sharpness
                     Belichtung_max = Belichtungszeit

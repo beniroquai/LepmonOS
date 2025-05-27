@@ -8,7 +8,10 @@ oled_font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'FreeSans
 
 # OLED-Setup
 Display = i2c(port=1, address=0x3C)
-oled = sh1106(Display)
+try:
+    oled = sh1106(Display)
+except:
+    pass
 oled_font = ImageFont.truetype('FreeSans.ttf', 14)
 
 # Funktion, um Text auf dem OLED anzuzeigen
@@ -33,14 +36,17 @@ def display_text(line1, line2, line3):
 
 
 
-def display_image (path):
+def display_text_and_image(line1, line2, line3, image_path):
     """
-    Zeigt ein Bild auf dem OLED-Display an.
-    
-    :param path: Pfad zum Bild
+    Zeigt links drei Zeilen Text und rechts ein Bild (64x64 px) auf dem OLED an.
     """
-    logo = Image.open(path)  # Konvertiere das Bild in Schwarz-Weiß
-
+    logo = Image.open(image_path).convert("1").resize((64, 64))
     with canvas(oled) as draw:
+        # Hintergrund löschen
         draw.rectangle(oled.bounding_box, outline="white", fill="black")
-        draw.bitmap((0, 0), logo, fill="white") 
+        # Bild rechts (z.B. bei 64x128 Display: x=64, y=0)
+        draw.bitmap((oled.width - 64, 0), logo, fill=1)
+        # Text links (z.B. x=5, y=5/25/45)
+        draw.text((5, 5), line1, font=oled_font, fill="white")
+        draw.text((5, 25), line2, font=oled_font, fill="white")
+        draw.text((5, 45), line3, font=oled_font, fill="white")
