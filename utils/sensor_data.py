@@ -9,11 +9,11 @@ import smbus2
 import json
 import os
 import logging
-from service import log_schreiben
-from json_read_write import get_value_from_section
-from error_handling import error_message
+from utils.service import log_schreiben
+from utils.json_read_write import get_value_from_section
+from utils.error_handling import error_message
 
-from times import *
+from utils.times import *
 
 
 os.system('sudo raspi-config nonint do_i2c 0') # I2C aktivieren

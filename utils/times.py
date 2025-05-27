@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 import pytz
 import ephem
-from utils.log import log_schreiben
-from utils.error_handling import error_message
-from utils.json_read_write import *
-import time
 import time
 import board
 import adafruit_ds3231
 import subprocess
+from utils.log import log_schreiben
+from utils.error_handling import error_message
+from utils.json_read_write import *
 
 try:
     i2c = board.I2C()

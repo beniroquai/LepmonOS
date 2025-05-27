@@ -1,9 +1,9 @@
-from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
-from json_read_write import *
 import time
-from service import log_schreiben
-from error_handling import error_message
+from utils.GPIO_Setup import turn_on_led, turn_off_led, button_pressed
+from utils.OLED_panel import display_text
+from utils.json_read_write import *
+from utils.service import log_schreiben
+from utils.error_handling import error_message
 
 
 def coordinates_in_list(latitude,longitude):
