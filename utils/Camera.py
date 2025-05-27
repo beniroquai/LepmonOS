@@ -1,14 +1,13 @@
-from Lights import dim_up, dim_down
-from json_read_write import get_value_from_section
 import time
 from datetime import datetime
 import os
 import cv2
-from OLED_panel import display_text
-from log import log_schreiben
-from GPIO_Setup import button_pressed
-from sensor_data import read_sensor_data
-from error_handling import error_message
+from utils.Lights import dim_up, dim_down
+from utils.json_read_write import get_value_from_section
+from utils.OLED_panel import display_text
+from utils.log import log_schreiben
+from utils.sensor_data import read_sensor_data
+from utils.error_handling import error_message
 try:
     project_name = get_value_from_section("./config/Lepmon_config.json","general","project_name")
     sensor_id = get_value_from_section("./config/Lepmon_config.json","general","serielnumber")
