@@ -1,7 +1,7 @@
-from json_read_write import get_value_from_section
 import RPi.GPIO as GPIO
 import time
-from log import log_schreiben
+from utils.json_read_write import get_value_from_section
+from utils.log import log_schreiben
 
 LepiLed_pin = 26
 dimmer_pin = 13
