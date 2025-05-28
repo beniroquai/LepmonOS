@@ -1,5 +1,5 @@
 from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
+from OLED_panel import *
 from json_read_write import *
 import time
 from service import log_schreiben
@@ -52,9 +52,9 @@ def coordinate_input():
     log_schreiben(f"alte Koordinaten: Breite {latitude_read}, Länge {longitude_read}")
     print(f"Breite:{latitude_read}")
     print(f"Länge:{longitude_read}")
-    display_text("Bitte", "Hemisphaeren", "eingeben")
+    display_text("Bitte", "Hemisphären", "eingeben")
     time.sleep(3)
-    display_text("Knopf oben = Nord", "", "Knopf unten = Süd")
+    display_text("▲ = Nord", "", "▼ = Süd")
 
     user = False
     nordsued = ""
@@ -71,7 +71,7 @@ def coordinate_input():
         else:
             time.sleep(.05)   
 
-    display_text("Knopf oben = Ost", "", "Knopf unten = West")
+    display_text("▲ = Ost", "", "▼ = West")
     user = False
     eastwest = ""
     while not user:
@@ -80,6 +80,7 @@ def coordinate_input():
             eastwest = "E"
             user = True
             turn_off_led("blau")
+            time.sleep(1)
         if button_pressed("unten"):
             eastwest = "W"
             user = True
@@ -95,28 +96,34 @@ def coordinate_input():
 
     aktuelle_position = 0
     Wahlmodus = 1
-    first_run = True
+    first_run_1 = True
+    first_run_2 = True
     while True:
         turn_on_led("blau")
+        if first_run_1:
+            time.sleep(1)
+            first_run_1 = False
         if Wahlmodus == 1:
             if aktuelle_position < 2:
                 positionszeiger = pol + "_" * aktuelle_position
             else:
                 positionszeiger = pol + "__." + "_" * (aktuelle_position - 2)  
             positionszeiger += "x"  
-            display_text("Breite (N-S):",
+            display_text_with_arrows("Breite (N-S):",
                         f"{pol}{latitude_list[0]}{latitude_list[1]}.{latitude_list[2]}{latitude_list[3]}{latitude_list[4]}{latitude_list[5]}{latitude_list[6]}{latitude_list[7]}{latitude_list[8]}",
-                        positionszeiger)
-            if first_run:
-              time.sleep(1)
-              first_run = False
+                        positionszeiger)            
+                        
+
         if Wahlmodus == 2:
+            if first_run_2:
+                time.sleep(1)
+                first_run_2 = False
             if aktuelle_position < 3:
                 positionszeiger = block + "_" * aktuelle_position
             else:
                 positionszeiger = block + "___." + "_" * (aktuelle_position - 3)
             positionszeiger += "x"  
-            display_text("Länge (O-W):",
+            display_text_with_arrows("Länge (O-W):",
                         f"{block}{longitude_list[0]}{longitude_list[1]}{longitude_list[2]}.{longitude_list[3]}{longitude_list[4]}{longitude_list[5]}{longitude_list[6]}{longitude_list[7]}{longitude_list[8]}{longitude_list[9]}",
                         positionszeiger)
         
@@ -126,28 +133,24 @@ def coordinate_input():
                 # Prüfung direkt nach Änderung
                 if not is_valid_latitude(latitude_list):
                     latitude_list[aktuelle_position] = (latitude_list[aktuelle_position] - 1) % 10
-                    display_text("Ungültige Breite!", "Bitte gültigen", "Wert wählen")
-                    time.sleep(2)
+                    display_text("Ungültige Breite!", "Bitte gültigen", "Wert wählen",2)
             if Wahlmodus == 2:
                 longitude_list[aktuelle_position] = (longitude_list[aktuelle_position] + 1) % 10
                 if not is_valid_longitude(longitude_list):
                     longitude_list[aktuelle_position] = (longitude_list[aktuelle_position] - 1) % 10
-                    display_text("Ungültige Länge!", "Bitte gültigen", "Wert wählen")
-                    time.sleep(2)
+                    display_text("Ungültige Länge!", "Bitte gültigen", "Wert wählen",2)
 
         if button_pressed("unten"):
             if Wahlmodus == 1:
                 latitude_list[aktuelle_position] = (latitude_list[aktuelle_position] - 1) % 10
                 if not is_valid_latitude(latitude_list):
                     latitude_list[aktuelle_position] = (latitude_list[aktuelle_position] + 1) % 10
-                    display_text("Ungültige Breite!", "Bitte gültigen", "Wert wählen")
-                    time.sleep(2)
+                    display_text("Ungültige Breite!", "Bitte gültigen", "Wert wählen",2)
             if Wahlmodus == 2:
                 longitude_list[aktuelle_position] = (longitude_list[aktuelle_position] - 1) % 10
                 if not is_valid_longitude(longitude_list):
                     longitude_list[aktuelle_position] = (longitude_list[aktuelle_position] + 1) % 10
-                    display_text("Ungültige Länge!", "Bitte gültigen", "Wert wählen")
-                    time.sleep(2)
+                    display_text("Ungültige Länge!", "Bitte gültigen", "Wert wählen",2)
 
         if button_pressed("rechts"):
             if Wahlmodus == 1:
@@ -197,11 +200,10 @@ def set_coordinates():
                 display_text("Koordinaten", "gespeichert", "") 
             break          
         else:
-            display_text("Ungültige", "Koordinaten!", "Bitte erneut eingeben")
-            time.sleep(2)
+            display_text("Ungültige", "Koordinaten!", "Bitte erneut eingeben",3)
     time.sleep(.5)      
 
 if __name__ == "__main__":
     set_coordinates()
     print("set coordinates")
-    display_text("Koordinaten", "gespeichert", "")
+    display_text("Koordinaten", "gespeichert", "",2)

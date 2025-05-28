@@ -13,6 +13,8 @@ from fram_operations import *
 from service import *
 from runtime import on_start
 from GPIO_Setup import turn_off_led
+from end import trap_shutdown
+
 
 
 
@@ -25,21 +27,8 @@ if __name__ == "__main__":
     Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
     date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
     try:
-        sn = read_fram(0x0110, 8).strip()
-        print(f"Serial Number from FRAM: {sn}")    
-    except Exception as e:
-        print("sn nicht vom Fram gelesen. nutze externe Datei")
-        sn = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
-        print(f"Serial Number from JSON: {sn}")
-
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", sn)
-
-    send_lora("Starte Lepmon Software")
-    
-    try:
-        display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png")
+        display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png",1)
         print("Wilkommen message 1 in Display")
-        time.sleep(3)
     except Exception as e:
         print(f"Error displaying text on OLED: {e}")
         print("Display not working")
@@ -47,32 +36,48 @@ if __name__ == "__main__":
             turn_on_led("rot")
             time.sleep(0.5)
             turn_off_led("rot")
-            time.sleep(0.5)    
+            time.sleep(0.5)      
+    try:
+        time.sleep(2)
+        sn = read_fram(0x0110, 8).strip()
+        print(f"Serial Number from FRAM: {sn}")    
+    except Exception as e:
+        print("sn nicht vom Fram gelesen. nutze externe Datei")
+        sn = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
+        print(f"Serial Number from JSON: {sn}")
+        
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_2_9.png") 
+    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", sn)
 
+    send_lora("Starte Lepmon Software")
+    
     try:
         ram_counter(0x0310)
     except Exception as e:
         print(f"Fehler beim Lesen des RAM-Counters: {e}")
 
-    
     set_serial_number()
     delete_error_code()
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_3_9.png")    
 
-    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_2_9.png")   
+  
 
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder", "")
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log", "")
     print("Konfigurationsdatei zurückgesetzt")
     
-    for i in range(3, 7):
-        time.sleep(1)
-        try:
-            display_text_and_image("Will-","kommen", Version, f"/home/Ento/LepmonOS/startsequenz/Logo_{i}_9.png")
-        except Exception as e:
-            pass
+    for i in range(4, 6):
+        display_text_and_image("Will-","kommen", Version, f"/home/Ento/LepmonOS/startsequenz/Logo_{i}_9.png",1)
 
-    erstelle_ordner()
+    ordner = erstelle_ordner()
+    if ordner == None:
+        display_text("USB Stick","nicht erkannt","neu einstecken",3)
+        trap_shutdown(5)
+        
     initialisiere_logfile()
+
+        
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_7_9.png",1)
 
     log_schreiben(f"Software- Version: {Version} vom {date}")
     log_schreiben("Experiment Parameter:")
@@ -80,26 +85,21 @@ if __name__ == "__main__":
 
     send_lora("Berechne Zeiten für Power Managament")
     sunset, sunrise, Zeitzone = get_sun()
-    try:
-        display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_8_9.png")
-    except:
-        pass
+
+
     log_schreiben(f"Sonnenuntergang: {sunset.strftime('%H:%M:%S')}")
     log_schreiben(f"Sonnenaufgang:   {sunrise.strftime('%H:%M:%S')}")
 
     send_lora(f"Sonnenuntergang: {sunset.strftime('%H:%M:%S')}\nSonnenaufgang: {sunrise.strftime('%H:%M:%S')}")
-    
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_8_9.png",1)  
     power_on, power_off = get_times_power()
 
     log_schreiben(f"Zeit für Power on mit Attiny:  {power_on}")
     log_schreiben(f"Zeit für Power off mit Attiny: {power_off}")
     set_alarm(power_on, power_off)
-    try:
-        display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_9_9.png")
-    except:
-        pass
-    send_lora(f"Zeit für Power on mit Attiny:  {power_on}\nZeit für Power off mit Attiny: {power_off}")
 
+    send_lora(f"Zeit für Power on mit Attiny:  {power_on}\nZeit für Power off mit Attiny: {power_off}")
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_9_9.png",1)
     set_alarm(power_on, power_off)
     try:
         store_times_power(power_on, power_off)

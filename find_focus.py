@@ -26,8 +26,7 @@ def set_exposure(Belichtungszeit):
                 Belichtungszeit -=1
         if Belichtungszeit < 1:
                 Belichtungszeit = 1        
-        display_text("Belichtungszeit:",f"{Belichtungszeit} ms","jetzt fokusieren")         
-        time.sleep(.1)   
+        display_text("Belichtungszeit:",f"{Belichtungszeit} ms","jetzt fokusieren",.1)         
     turn_off_led("blau")
 
     return Belichtungszeit
@@ -41,13 +40,12 @@ def focus():
           "Falle berechnet den schärsten Fokus, bassierend auf der 'Variance of Laplacian'\n" 
           "siehe https://pyimagesearch.com/2015/09/07/blur-detection-with-opencv/\n"
           "Fokusring drehen, bis der Schärfewert im Display sein Maximum erreicht hat")
-    display_text("fokussieren","bis Anzeigewert","Maximum erreicht")
-    time.sleep(5)
+    display_text("fokussieren","bis Anzeigewert","Maximum erreicht",3)
     FokusFehler = 0
     maximum = 0
     turn_on_led("gelb")
     while not button_pressed("enter"):
-        display_text(f"Schärfewert: {sharpness}",f"Exposure: {Belichtungszeit} ms",f"peak: {maximum} @ {Belichtung_max}")
+        display_text(f"Schärfewert: {sharpness}",f"Exposure: {Belichtungszeit} ms",f"peak: {maximum} @ {Belichtung_max}",.1)
         dim_up()
         frame = get_frame(Belichtungszeit)
         dim_down()
@@ -59,17 +57,14 @@ def focus():
             
         if FokusFehler == 4:
             error_message(2,"Kamera mehrfach beim Fokussieren nicht initialisiert. Falle startet neu")
-            display_text("Kamera überlastet","fokusieren nicht","beendet")
-            time.sleep(3)
-            display_text("nach Neustart","mit Fokusieren","fortfahren")
-            time.sleep(3)
+            display_text("Kamera überlastet","fokusieren nicht","beendet",3)
+            display_text("nach Neustart","mit Fokusieren","fortfahren",3)
             trap_shutdown(5)
 
         print("analyse")
 
         if FokusFehler == 0:
             if frame is not None:
-                display_text(f"Schärfewert: {sharpness}",f"peak: {maximum} @ {Belichtung_max}",f"set exposure {Belichtungszeit}")
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
                 sharpness = round(cv2.Laplacian(gray, cv2.CV_64F).var(),0)
                 turn_off_led("gelb")

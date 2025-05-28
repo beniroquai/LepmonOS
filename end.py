@@ -39,8 +39,7 @@ def trap_shutdown(i):
         send_lora(f"Falle fährt in {i} Sekunden herunter. Letzte Nachricht im aktuellen Run\nBeachte, dass der Stromcontroller die Falle erst kurz vor der nächsten Dämmerung wieder aktiviert")
 
     for sec in range(i, 0, -1):
-        display_text("Falle startet", "neu in", f"{sec} Sekunden")
-        time.sleep(1)
+        display_text("Falle startet", "neu in", f"{sec} Sekunden",1)
     display_text("", "", "")    
     
     on_shutdown()

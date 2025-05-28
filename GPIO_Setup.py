@@ -70,3 +70,4 @@ if __name__ == "__main__":
     print("Teste GPIO-Setup...")
     turn_on_led("blau")
     turn_off_led("blau")    
+    

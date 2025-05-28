@@ -15,7 +15,7 @@ except:
 oled_font = ImageFont.truetype('FreeSans.ttf', 14)
 
 # Funktion, um Text auf dem OLED anzuzeigen
-def display_text(line1, line2, line3):
+def display_text(line1, line2, line3, sleeptime =0):
     """
     Zeigt drei Zeilen Text auf dem OLED-Display an.
     Der Text bleibt auf dem Display, bis er überschrieben wird.
@@ -23,30 +23,47 @@ def display_text(line1, line2, line3):
     :param line1: Text für die erste Zeile
     :param line2: Text für die zweite Zeile
     :param line3: Text für die dritte Zeile
+    :param sleeptime: Zeit für displaydauer
     """
-    with canvas(oled) as draw:
-        # Hintergrund löschen, um alten Text zu entfernen
-        draw.rectangle(oled.bounding_box, outline="white", fill="black")
-        # Text in die jeweiligen Zeilen schreiben
-        draw.text((5, 5), line1, font=oled_font, fill="white")
-        draw.text((5, 25), line2, font=oled_font, fill="white")
-        draw.text((5, 45), line3, font=oled_font, fill="white")
+    try:
+        with canvas(oled) as draw:
+            # Hintergrund löschen, um alten Text zu entfernen
+            draw.rectangle(oled.bounding_box, outline="white", fill="black")
+            # Text in die jeweiligen Zeilen schreiben
+            draw.text((5, 5), line1, font=oled_font, fill="white")
+            draw.text((5, 25), line2, font=oled_font, fill="white")
+            draw.text((5, 45), line3, font=oled_font, fill="white")
+        time.sleep(sleeptime) 
+    except:
+        pass       
 
 
-
-
-
-def display_text_and_image(line1, line2, line3, image_path):
+def display_text_and_image(line1, line2, line3, image_path,sleeptime =0):
     """
     Zeigt links drei Zeilen Text und rechts ein Bild (64x64 px) auf dem OLED an.
     """
-    logo = Image.open(image_path).convert("1").resize((64, 64))
+    try:
+        logo = Image.open(image_path).convert("1").resize((64, 64))
+        with canvas(oled) as draw:
+            # Hintergrund löschen
+            draw.rectangle(oled.bounding_box, outline="white", fill="black")
+            # Bild rechts (z.B. bei 64x128 Display: x=64, y=0)
+            draw.bitmap((oled.width - 64, 0), logo, fill=1)
+            # Text links (z.B. x=5, y=5/25/45)
+            draw.text((5, 5), line1, font=oled_font, fill="white")
+            draw.text((5, 25), line2, font=oled_font, fill="white")
+            draw.text((5, 45), line3, font=oled_font, fill="white")
+            time.sleep(sleeptime)
+    except:
+        pass        
+    
+def display_text_with_arrows(line1, line2, line3, sleeptime=0):
     with canvas(oled) as draw:
-        # Hintergrund löschen
         draw.rectangle(oled.bounding_box, outline="white", fill="black")
-        # Bild rechts (z.B. bei 64x128 Display: x=64, y=0)
-        draw.bitmap((oled.width - 64, 0), logo, fill=1)
-        # Text links (z.B. x=5, y=5/25/45)
         draw.text((5, 5), line1, font=oled_font, fill="white")
         draw.text((5, 25), line2, font=oled_font, fill="white")
         draw.text((5, 45), line3, font=oled_font, fill="white")
+        draw.text((110, 5), "▲", font=oled_font, fill="white")
+        draw.text((110, 25), "→", font=oled_font, fill="white")
+        draw.text((110, 45), "▼", font=oled_font, fill="white")
+    time.sleep(sleeptime)    

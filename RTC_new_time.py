@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
+from OLED_panel import *
 import adafruit_ds3231
 from log import log_schreiben
 from error_handling import error_message
@@ -42,9 +42,10 @@ def input_time():
             elif aktuelle_position >= 6:
                 positionszeiger_time = "_"*4 + "-" + "_" *2 + "-" + "_" * (aktuelle_position-6)
             positionszeiger_time += "x"
-            display_text("Datum einstellen",
-                         f"{date_time_list[0]}{date_time_list[1]}{date_time_list[2]}{date_time_list[3]}-{date_time_list[4]}{date_time_list[5]}-{date_time_list[6]}{date_time_list[7]}", 
-                         positionszeiger_time)
+            display_text_with_arrows("Datum einstellen", 
+                                    f"{date_time_list[0]}{date_time_list[1]}{date_time_list[2]}{date_time_list[3]}-{date_time_list[4]}{date_time_list[5]}-{date_time_list[6]}{date_time_list[7]}",
+                                    positionszeiger_time)
+
         elif Wahlmodus == 2:
             if first_run:
                 time.sleep(1)  # Kurze Pause für die Stabilität
@@ -57,7 +58,7 @@ def input_time():
             elif aktuelle_position >=12 :
                 positionszeiger = "__:__" + ":" + "_" * (aktuelle_position-12)
             positionszeiger += "x"
-            display_text("Zeit einstellen",
+            display_text_with_arrows("Zeit einstellen",
                          f"{date_time_list[8]}{date_time_list[9]}:{date_time_list[10]}{date_time_list[11]}:{date_time_list[12]}{date_time_list[13]}",
                          positionszeiger)
 
@@ -168,34 +169,28 @@ def check_date_time():
     jahr, monat, tag, stunde, minute, sekunde, _ = input_time()
     try:
         # Jahr prüfen
-        if not (2000 <= jahr <= 2099):
-            display_text("ungültiges Jahr, bitte neu eingeben","")   
-            time.sleep(3)       
+        if not (2025 <= jahr <= 2035):
+            display_text("ungültiges Jahr, bitte neu eingeben","",3)       
             return False
         # Monat prüfen
         if not (1 <= monat <= 12):
-            display_text("ungültiger Monat, bitte neu eingeben","")
-            time.sleep(3)
+            display_text("ungültiger Monat, bitte neu eingeben","",3)
             return False
         # Tag prüfen (einfach, ohne Monatslänge/Schaltjahr)
         if not (1 <= tag <= 31):
-            display_text("ungültiger Tag, bitte neu eingeben","")
-            time.sleep(3)
+            display_text("ungültiger Tag, bitte neu eingeben","",3)
             return False
         # Stunde prüfen
         if not (0 <= stunde <= 23):
-            display_text("ungültige Stunde, bitte neu eingeben","")
-            time.sleep(3)
+            display_text("ungültige Stunde, bitte neu eingeben","",3)
             return False
         # Minute prüfen
         if not (0 <= minute <= 59):
-            display_text("ungültige Minute, bitte neu eingeben","")
-            time.sleep(3)
+            display_text("ungültige Minute, bitte neu eingeben","",3)
             return False
         # Sekunde prüfen
         if not (0 <= sekunde <= 59):
-            display_text("ungültige Sekunde, bitte neu eingeben","")
-            time.sleep(3)
+            display_text("ungültige Sekunde, bitte neu eingeben","",3)
             return False
         # Optional: exakte Prüfung mit datetime (inkl. Monatslänge/Schaltjahr)
         datetime(jahr, monat, tag, stunde, minute, sekunde)
@@ -215,9 +210,8 @@ def set_hwc():
         sekunde = int(f"{date_time_list[12]}{date_time_list[13]}")
         # Prüfe Werte vor dem Setzen!
         if not (2000 <= jahr <= 2099 and 1 <= monat <= 12 and 1 <= tag <= 31 and 0 <= stunde <= 23 and 0 <= minute <= 59 and 0 <= sekunde <= 59):
-            display_text("Ungültige Eingabe!", "Bitte erneut", "versuchen.")
+            display_text("Ungültige Eingabe!", "Bitte erneut", "versuchen.",3)
             print("Ungültige Eingabe, bitte erneut versuchen.")
-            time.sleep(1)
             _, _, _, _, _, _, date_time_list = input_time()
             continue
         try:
@@ -233,8 +227,7 @@ def set_hwc():
             break
         except Exception as e:
             error_message(8, e)
-            display_text("Fehler beim Setzen", "der Uhrzeit!", "")
-            time.sleep(2)
+            display_text("Fehler beim Setzen", "der Uhrzeit!", "",3)
             _, _, _, _, _, _, date_time_list = input_time()
     time.sleep(0.5)
 

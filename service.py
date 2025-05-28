@@ -39,7 +39,7 @@ def erstelle_ordner():
     jetzt_local = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
     #jetzt_local = datetime.now()
     ordnername = f"{project_name}{sensor_id}_{province}_{city_code}_{jetzt_local.strftime('%Y')}-{jetzt_local.strftime('%m')}-{jetzt_local.strftime('%d')}_T_{jetzt_local.strftime('%H%M')}"
-    aktueller_nachtordner = ""
+    aktueller_nachtordner = None
     try:
         if aktueller_nachtordner is None or not os.path.exists(aktueller_nachtordner):
             aktueller_nachtordner = os.path.join(zielverzeichnis, ordnername)
@@ -47,10 +47,11 @@ def erstelle_ordner():
             print(f"Ordner erstellt: {aktueller_nachtordner}")
             write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder",aktueller_nachtordner)
             print("Pfad des Ausgabe Ordner in der Konfigurationsdatei gespeichert")
-    
+            return aktueller_nachtordner
     except Exception as e:
         error_message(3,e)
-        time.sleep(5)
+        return aktueller_nachtordner
+        
 
 
 def initialisiere_logfile():
@@ -107,6 +108,9 @@ def get_disk_space(): ####Speicher Abfrage####
 
 def checksum(dateipfad, algorithm="md5"):
   try:
+    if not os.path.exists(dateipfad):  # Prüfe, ob die Datei existiert
+      raise FileNotFoundError(f"Datei nicht gefunden: {dateipfad}")
+
     hash_func = hashlib.new(algorithm)  # Erstelle ein neues Hash-Objekt
     
     with open(dateipfad, "rb") as file: # Datei im Binärmodus lesen und Hash aktualisieren

@@ -19,8 +19,7 @@ def update_LepmonOS():
     backup_folder = target_folder + f"_backup_{Version}__{timestamp}"
 
     if os.path.exists(update_folder):
-        display_text("Update-Ordner", "gefunden","")
-        time.sleep(2)
+        display_text("Update-Ordner", "gefunden","",2)
         print("Update-Ordner gefunden. Starte Update...")
         if os.path.exists(backup_folder):
             shutil.rmtree(backup_folder)
@@ -40,9 +39,8 @@ def update_LepmonOS():
         print("Update abgeschlossen")
     else:
         print("Kein Update-Ordner auf USB-Stick gefunden.")
-        display_text("Update-Ordner", "nicht gefunden","")
+        display_text("Update-Ordner", "nicht gefunden","",2)
         log_schreiben("kein Update gefunden")
-        time.sleep(2)
         
            
 def is_valid_update_stick():
@@ -50,14 +48,12 @@ def is_valid_update_stick():
     marker_file = os.path.join(usb_mount, "LEPMON_UPDATE.KEY")
     if not os.path.exists(marker_file):
         print("LEPMON_UPDATE.KEY Datei nicht gefunden.")
-        display_text("Schlüsseldatei", "nicht gefunden","")
-        time.sleep(2)
+        display_text("Schlüsseldatei", "nicht gefunden","",2)
         return False
     with open(marker_file, "r") as f:
         content = f.read()
         print(f"LEPMON_UPDATE.KEY Datei gefunden. Inhalt: {content} Fahre mit Update fort")
-        display_text("Schlüsseldatei", "gefunden","")
-        time.sleep(2)
+        display_text("Schlüsseldatei", "gefunden","",1)
     return "LEPMON-UPDATE-KEY-2025" in content
 
 def get_new_version_from_stick():
@@ -88,20 +84,17 @@ def is_update_allowed():
     if not new_version or not current_version:
         print("Konnte Version nicht lesen.")
         display_text("neue Version", "nicht gefunden","")
-        log_schreiben("neue Version nicht gefunden")
-        time.sleep(2)
+        log_schreiben("neue Version nicht gefunden",2)
         return False
     if version_tuple(new_version) == version_tuple(current_version):
         print("Version ist gleich, Update nicht nötig.")
-        display_text("Software Version", "bereits aktuell","")
+        display_text("Software Version", "bereits aktuell","",2)
         log_schreiben("Software Version bereits aktuell")
-        time.sleep(2)
         return False
     elif version_tuple(new_version) < version_tuple(current_version):
         print("Downgrade nicht erlaubt!")
-        display_text("Downgrade", "nicht erlaubt","")
+        display_text("Downgrade", "nicht erlaubt","",2)
         log_schreiben("Downgrade nicht erlaubt")
-        time.sleep(2)
         return False
     else:
         print("Update erlaubt!")
@@ -119,25 +112,22 @@ def update():
             display_text("Update", "wird gestartet", "")
             update_LepmonOS()
             print("Update erfolgreich!")
-            display_text("Update", "erfolgreich","")
+            display_text("Update", "erfolgreich","",1)
             new_version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
             new_date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date")
             print(f"Neue Version: {new_version} vom {new_date}")
-            display_text("Neue Version:", new_version, new_date)
-            time.sleep(3)
+            display_text("Neue Version:", new_version, new_date,3)
             log_schreiben(f"neue Softwareversion:{new_version}")
             write_fram(0x0520, new_version.ljust(7))  # Update die Version im FRAM
             write_fram(0x0510, new_date.ljust(10))  # Update das Datum im FRAM
             print("Version im FRAM aktualisiert.")
             log_schreiben("starte neu")
-            display_text("Update installiert","Falle startet neu","")
-            time.sleep(2)
+            display_text("Update installiert","Falle startet neu","",2)
             trap_shutdown(5)
 
         except Exception as e:
             print(f"Fehler beim Update: {e}")
-            display_text("Kein Update", "durchgeführt", "fahre fort")
-            time.sleep(3)
+            display_text("Kein Update", "durchgeführt", "fahre fort",3)
             log_schreiben(f"Fehler beim update:{e}")
             return
     else:

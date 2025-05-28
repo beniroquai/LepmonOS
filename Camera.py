@@ -28,7 +28,6 @@ def get_frame(Exposure):
         try:
             with cams[0] as cam:
                 formats = cam.get_pixel_formats()
-                #print("Unterstützte Pixelformate:", formats)
 
                 cam.set_pixel_format(PixelFormat.Bgr8)
 
@@ -73,7 +72,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
 
     print("dimme LED hoch")
     if mode == "display":
-        display_text("Dimme LED","hoch","")
+        display_text("Dimme LED","hoch","",1)
         ordnerpfad = "/home/Ento/LepmonOS/"
         power_on = 0
 
@@ -83,8 +82,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
         Kamera_Fehlerserie = 0
 
     if frame is None and mode == "display":
-        error_message(1,"Fehler beim Abrufen des Frames")
-        time.sleep(10)
+        error_message(1,"Fehler beim Abrufen des Frames",3)
 
     if frame is None and mode == "log": 
         Status_Kamera = 0   
@@ -98,17 +96,15 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
 
     print("dimme LED runter")
     if mode == "display":
-        display_text("Dimme LED","herunter","")
+        display_text("Dimme LED","herunter","",1)
 
     try:
         cv2.imwrite(dateipfad, frame)
         print(f"Bild gespeichert: {dateipfad}")
         Status_Kamera = 1
         if mode == "display":
-            display_text("Bild","gespeichert","")
-            time.sleep(.5)
+            display_text("Bild","gespeichert","",2)
             os.remove(dateipfad)
-            time.sleep(.1)
             print(f"Bild vom Speicher gelöscht: {dateipfad}")
             log_schreiben("Kamera Zugriff erfolgreich")
         if mode == "log": 
@@ -116,6 +112,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
 
     except Exception as e:
         Status_Kamera = 0
+        print(f"Kamerafehler:{e}")
 
     return code, dateipfad, Status_Kamera, power_on, Kamera_Fehlerserie
 

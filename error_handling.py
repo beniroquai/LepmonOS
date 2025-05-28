@@ -105,7 +105,7 @@ def error_message(error_number, error_details):
     text1, text2, text3 = get_display_message(error_number)  # Get display message
     logging_text, _ = get_log_message(error_number)  # Get log message (only need the first element)
     try:
-        display_text(text3, text1, text2)  # Zeige die Fehlermeldung auf dem Display an
+        display_text(text3, text1, text2,3)  # Zeige die Fehlermeldung auf dem Display an
     except Exception as e:
         pass
     try:

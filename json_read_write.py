@@ -76,3 +76,4 @@ def write_value_to_section(file_path, section_name, key_name, value):
 if __name__ == "__main__":
     latitude, longitude, Pol, Block = get_coordinates()
     print(f"Koordinaten abgefragt:\n{Pol}{latitude},\n{Block}{longitude}")
+    

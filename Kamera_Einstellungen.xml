@@ -46,8 +46,8 @@
     </FeatureGroup>
     <SelectorGroup Count="8" SelectedFeatures="42">
         <Selector Name="BalanceRatioSelector" Type="Enumeration" SelectedFeatures="1">
-            <SelectorCombination Entry="Red" Feature="BalanceRatio" Type="Float">2.055176</SelectorCombination>
-            <SelectorCombination Entry="Blue" Feature="BalanceRatio" Type="Float">1.929199</SelectorCombination>
+            <SelectorCombination Entry="Red" Feature="BalanceRatio" Type="Float">2.17</SelectorCombination>
+            <SelectorCombination Entry="Blue" Feature="BalanceRatio" Type="Float">2.05</SelectorCombination>
         </Selector>
         <Selector Name="ColorTransformationValueSelector" Type="Enumeration" SelectedFeatures="1">
             <SelectorCombination Entry="Gain00" Feature="ColorTransformationValue" Type="Float">1.000000</SelectorCombination>

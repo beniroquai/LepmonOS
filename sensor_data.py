@@ -172,3 +172,4 @@ if __name__ == "__main__":
         print(f"{key}: {value}")
     #write_sensor_data_to_json(sensor_data)    
     time.sleep(3)  # Sleep for a second before the next read 
+    

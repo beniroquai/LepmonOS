@@ -68,3 +68,4 @@ if __name__ == "__main__":
     LepiLED_start()
     time.sleep(1)  
     LepiLED_ende()     
+    

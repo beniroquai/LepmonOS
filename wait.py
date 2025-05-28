@@ -38,9 +38,8 @@ def wait():
         for _ in range(60):
             hours, remainder = divmod(int(countdown), 3600)  # Stunden berechnen
             minutes, seconds = divmod(remainder, 60)  # Minuten und Sekunden berechnen
-            display_text("Beginne in", f"{hours:02d}:{minutes:02d}:{seconds:02d}", "")
+            display_text("Beginne in", f"{hours:02d}:{minutes:02d}:{seconds:02d}", "",1)
             countdown -= 1  # Eine Sekunde abziehen
-            time.sleep(1)
         display_text("", "", "")
         countdown -=60
         time.sleep(countdown)

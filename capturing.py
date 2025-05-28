@@ -12,11 +12,11 @@ from lora import send_lora
 from error_handling import error_message
 import shutil
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 from wait import wait 
 from fram_operations import *
 import struct
-
+import time
 
 wait()
 log_schreiben("Beginne Daten und Bildaufnahme")
@@ -36,12 +36,13 @@ except:
     pass
 
 try: 
+    # Schreibe freien Speicher als Float (4 Bytes) ins FRAM
     write_fram_bytes(0x0390, struct.pack('f', free_space_gb))
     print(f"freien Speicher im Ram gemerkt:{free_space_gb}")
 except Exception as e:
     print(f"Fehler beim Schreiben des freien Speichers in den RAM: {e}")
 
-experiment_start_time, experiment_end_time, LepiLed_end_time,_ ,_ = get_experiment_times()
+experiment_start_time, experiment_end_time, LepiLed_end_time, _, _ = get_experiment_times()
 _, sunrise, _ = get_sun()
 sunrise = sunrise.strftime('%H:%M:%S')
 
@@ -65,16 +66,16 @@ print("beende Schleife:", experiment_end_time)
 try:
     ordner = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder")
     Dateiname = os.path.basename(ordner)
-    zieldatei = os.path.join(ordner,f"{Dateiname}_Kameraeinstellungen.xml")
-    shutil.copy("/home/Ento/LepmonOS/Kamera_Einstellungen.xml",zieldatei)
+    zieldatei = os.path.join(ordner, f"{Dateiname}_Kameraeinstellungen.xml")
+    shutil.copy("/home/Ento/LepmonOS/Kamera_Einstellungen.xml", zieldatei)
     checksum(zieldatei, algorithm="md5")
     print("Kameraeinstellungen kopiert")
 except Exception as e:
-    print(f"Fehler beim Kopieren der Kameraeinstellungen")
+    print(f"Fehler beim Kopieren der Kameraeinstellungen: {e}")
 
 while True:
-    _,lokale_Zeit = Zeit_aktualisieren()
-    sensors = read_sensor_data("check Lux",lokale_Zeit)
+    _, lokale_Zeit = Zeit_aktualisieren()
+    sensors = read_sensor_data("check Lux", lokale_Zeit)
     ambient_light = sensors["LUX"]
 
     if (ambient_light <= dusk_treshold and not experiment_end_time <= lokale_Zeit <= experiment_start_time) or\
@@ -97,32 +98,31 @@ while True:
         
         Exposure = initial_exposure
         if experiment_start_string <= lokale_Zeit_string <= experiment_start_string + timedelta(hours=1):
-            Exposure = initial_exposure -30
+            Exposure = initial_exposure - 30
 
         if LepiLed_end_time <= lokale_Zeit < experiment_end_time:
-            Exposure = initial_exposure -30
-            if UV_active :
+            Exposure = initial_exposure - 30
+            if UV_active:
                 LepiLED_ende()
                 log_schreiben("LepiLED ausgeschaltet")
                 send_lora("LepiLED ausgeschaltet")
                 UV_active = False  
         
-        code, current_image, Status_Kamera, power_on, Kamera_Fehlerserie = snap_image("tiff","log",Kamera_Fehlerserie,Exposure)
-        sensors = read_sensor_data(code,lokale_Zeit)
+        code, current_image, Status_Kamera, power_on, Kamera_Fehlerserie = snap_image("tiff", "log", Kamera_Fehlerserie, Exposure)
+        sensors = read_sensor_data(code, lokale_Zeit)
         sensors["Status_Kamera"] = Status_Kamera
         sensors["Exposure"] = Exposure
         print(power_on)
         if not power_on == "---" and not sensors["power"] == "---":
-            Visible_LED = round((power_on - sensors["power"])/1000,2)          
+            Visible_LED = round((power_on - sensors["power"]) / 1000, 2)          
         
-            if Visible_LED >3:
+            if Visible_LED > 3:
                 Status_LED = 1
             elif 1 < Visible_LED < 3:
-                error_message(12,Visible_LED)
+                error_message(12, Visible_LED)
                 Status_LED = 0
-
             elif 1 > Visible_LED:
-                error_message(12,Visible_LED)
+                error_message(12, Visible_LED)
                 Status_LED = 0 
 
             sensors["Status_Visible_LED"] = Status_LED 
@@ -131,7 +131,6 @@ while True:
         if power_on == "---" or sensors["power"] == "---":
             sensors["Status_Visible_LED"] = '--' 
             sensors["Power_Visible_LED"] = '---'
-            
             
         if UV_active:
             sensors["LepiLED"] = "active" 
@@ -142,9 +141,8 @@ while True:
 
         checksum(current_image, algorithm="md5")
 
-
         if Kamera_Fehlerserie >= 3:
-            error_message(2,"")
+            error_message(2, "")
             print("Beende Aufnahme Schleife\nLeite zum Ausschalten über")
             log_schreiben("Beende Aufnahme Schleife. Bereite Neustart vor.")
             log_schreiben("Fahre Falle in 1 Minute herunter und startet neu")
@@ -153,10 +151,9 @@ while True:
             checksum(log_path, algorithm="md5")
             break              
 
-
         last_image = datetime.strptime(lokale_Zeit, "%H:%M:%S")
         next_image = (last_image + timedelta(minutes=interval)).replace(second=0, microsecond=0)
-        _,lokale_Zeit = Zeit_aktualisieren()
+        _, lokale_Zeit = Zeit_aktualisieren()
         lokale_Zeit = datetime.strptime(lokale_Zeit, "%H:%M:%S")
         time_to_next_image = (next_image - lokale_Zeit).total_seconds()
 
@@ -165,9 +162,8 @@ while True:
         if time_to_next_image > 0:
             time.sleep(time_to_next_image)
 
-
     elif (ambient_light > dusk_treshold and sunrise <= lokale_Zeit <= experiment_start_time) or\
-         (experiment_end_time <= lokale_Zeit <= experiment_start_time) :
+         (experiment_end_time <= lokale_Zeit <= experiment_start_time):
         try:
             checksum(csv_path, algorithm="md5")
         except Exception as e:
@@ -177,20 +173,21 @@ while True:
         log_schreiben("------------------")
         _, _, free_space_gb_after_run, _, _ = get_disk_space()
         try:
-            free_space_before_run = read_fram(0x0390,6)
-            size = free_space_before_run-free_space_gb_after_run
-            log_schreiben(f"in dieser Nacht wurden {size} GB an Daten generiert")
-            send_lora(f"in dieser Nacht wurden {size} GB an Daten generiert")
+            # Lese die 4 Bytes Float aus dem FRAM und rechne mit aktuellem Wert
+            free_space_before_run_bytes = read_fram_bytes(0x0390, 4)
+            free_space_before_run = struct.unpack('f', free_space_before_run_bytes)[0]
+            size = free_space_before_run - free_space_gb_after_run
+            size_rounded = round(size, 1)
+            log_schreiben(f"in dieser Nacht wurden {size_rounded} GB an Daten generiert")
+            send_lora(f"in dieser Nacht wurden {size_rounded} GB an Daten generiert")
         except Exception as e:
-            print("Kein Ram vorhanden. verbrauchter Speicher nicht gemessen")    
+            print(f"Kein Ram vorhanden. verbrauchter Speicher nicht gemessen:{e}")    
             log_schreiben("Kein Ram vorhanden. verbrauchter Speicher nicht gemessen")
             pass
         log_schreiben("Beende Aufnahme Schleife. Leite zum Ausschalten über")
         log_schreiben("Fahre Falle in 1 Minute herunter und startet neu")
         checksum(log_path, algorithm="md5")
 
-        
         break
-    
     
 print("hauptschleife beendet")

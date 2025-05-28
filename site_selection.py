@@ -36,10 +36,13 @@ def set_location_code():
         if button_pressed("oben"):
             if level == "country":
                 index = (index - 1) % len(data)
+                time.sleep(1)
             elif level == "province":
                 index = (index - 1) % len(data[country])
+                time.sleep(1)                
             elif level == "city":
                 city_count = len(data[country][province])
+                time.sleep(1)                
                 if city_count >1:
                     index = (index - 1) % city_count
                     index = max(1, index)
@@ -47,10 +50,13 @@ def set_location_code():
         if button_pressed("unten"):
             if level == "country":
                 index = (index + 1) % len(data)
+                time.sleep(1)                
             elif level == "province":
-                index = (index + 1) % len(data[country])       
+                index = (index + 1) % len(data[country])
+                time.sleep(1)                       
             elif level == "city":
                 city_count = len(data[country][province])
+                time.sleep(1)                
                 if city_count >1:
                     index = (index + 1) % city_count
                     index = max(1, index)     
@@ -59,25 +65,24 @@ def set_location_code():
                 country = countries[index]
                 level = "province"
                 index = 0
+                time.sleep(1)                
             elif level == "province":
                 provinces = list(data[country].keys())
                 province = provinces[index]
-                print(province)
                 codes = data[country][province]
                 province_code = codes[0] if codes else None
                 print(province_code)
                 level = "city"
                 city_count = len(data[country][province])
                 index = 1 if city_count > 1 else 0
+                time.sleep(1)                
             elif level == "city":
                 codes = data[country][province]
                 city_code = codes[index]
         if button_pressed("enter"):
-            display_text("Auswahl","abgeschlossen","")
+            display_text("Auswahl","abgeschlossen","",2)
             print(f"Ausgewählter Ort: {country} {province_code} {city_code}")
-            time.sleep(3)
-            display_text(f"{country}",f"{province}", f"{city_code}")
-            time.sleep(3)
+            display_text(f"{country}",f"{province}", f"{city_code}",3)
             break
         time.sleep(.05)
         
@@ -112,7 +117,3 @@ def set_location_code():
 
 if __name__ == "__main__":
     set_location_code()
-
-
-            
-           
