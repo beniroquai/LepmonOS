@@ -20,7 +20,7 @@ try:
     from vimba import *
     IS_VIMBA = True
     IS_IMSWITCH = False
-except ImportError as e:
+except Exception as e:
     IS_IMSWITCH = True
     IS_VIMBA = False
     error_message(11,e)
