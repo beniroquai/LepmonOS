@@ -167,20 +167,22 @@ if __name__ == "__main__":
 
                 USB = 0
                 while USB == 0:
-                    
-                    total_space_gb, used_space_gb, free_space_gb, used_percent, free_percent = get_disk_space()
+                    total_space_gb = None
+                    total_space_gb, used_space_gb, free_space_gb, _, _ = get_disk_space()
                     display_text("USB Speicher", f"gesamt: {str(total_space_gb)} GB", f"frei:   {str(free_space_gb)} GB",3)
                     log_schreiben(f"USB Speicher: gesamt: {str(total_space_gb)} GB; frei: {str(free_space_gb)} GB")
                     if total_space_gb is None:
                         display_text("USB Speicher","nicht erkannt","Prüfe Anschluss",3)
-                    elif free_space_gb is not None and free_space_gb < 13:
+                        trap_shutdown(5)
+                    elif free_space_gb < 13:
                         display_text("USB Speicher","fast voll","bitte leeren",3)
                         log_schreiben("USB Speicher fast voll, bitte leeren")
                         trap_shutdown(5)
-                    elif free_space_gb is not None and free_space_gb >= 13:
+                    elif free_space_gb >= 13:
                         display_text("USB Speicher","OK","",1)
                         log_schreiben("USB Speicher OK")
                         USB = 1   
+                    time.sleep(.05)    
                 
                 sunset, sunrise, Zeitzone = get_sun()
                 sunset = str(sunset)

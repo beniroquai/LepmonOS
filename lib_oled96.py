@@ -138,3 +138,4 @@ class const:
     SETSTARTLINE = 0x40
     SETVCOMDETECT = 0xDB
     SWITCHCAPVCC = 0x2
+    

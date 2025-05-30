@@ -50,8 +50,8 @@ def write_config_to_fram():
     write_fram(0x0520, config.get("FRAM", "software_version"))
 
 #### Fehlercode 0###
-    write_fram(0x1000, "error_code")
-    write_fram_bytes(0x100F, (0).to_bytes(4, byteorder='big'))  # Fehlercode 0
+    write_fram(0x0800, "error_code")
+    write_fram_bytes(0x081F, (0).to_bytes(4, byteorder='big'))  # Fehlercode 0
 #### Fehlerhäufigkeitstabelle ####   
     write_fram(0x0820, "error_counts") 
     write_fram(0x0830, "Err01")
@@ -66,7 +66,7 @@ def write_config_to_fram():
     write_fram(0x0950, "Err10")
     write_fram(0x0970, "Err11")
     write_fram(0x0990, "Err12")
-    write_fram(0x09C0, "Err13")
+    write_fram(0x09B0, "Err13")
 
 
     print("Alle Werte erfolgreich in FRAM geschrieben.")

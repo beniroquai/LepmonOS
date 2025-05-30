@@ -54,3 +54,4 @@ if __name__ == "__main__":
             rtc.alarm1_status = False
             print("Ende des Alarm Tests")
             break
+        
