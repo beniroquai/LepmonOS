@@ -158,11 +158,15 @@ if __name__ == "__main__":
                     
                     display_text("Kamera Test","aktiviere","UV Lampe",1)  
                     LepiLED_start()
-                    _, _, Status_Kamera, _, _ = snap_image("jpg","display",0,80)
+                    try:
+                        _, _, Status_Kamera, _, _ = snap_image("jpg","display",0,80)
+                    except:
+                        pass
                     LepiLED_ende()
                     time.sleep(1)
                     print(f"Kamera Status: {Status_Kamera}")
-                    display_text("Kamera Test","Fehler- Falle","wiederhohlt Test",3)
+                    if Status_Kamera == 0:
+                        display_text("Kamera Test","Fehler- Falle","wiederhohlt Test",3)
                 display_text("Kamera Test","erfolgreich","beendet",3)   
 
                 USB = 0

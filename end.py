@@ -45,6 +45,7 @@ def trap_shutdown(i):
     on_shutdown()
     time.sleep(2)
     os.system("sudo reboot")
+    display_text("","","")
     #os. system("sudo shutdown -r 1")
     
 if __name__ == "__main__":

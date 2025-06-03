@@ -72,7 +72,7 @@ if __name__ == "__main__":
     ordner = erstelle_ordner()
     if ordner == None:
         display_text("USB Stick","nicht erkannt","neu einstecken",3)
-        trap_shutdown(5)
+        trap_shutdown(60)
         
     initialisiere_logfile()
 
