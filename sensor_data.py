@@ -166,7 +166,7 @@ def display_sensor_data(sensor_data, sensor_status):
 
         
 if __name__ == "__main__":
-    _, lokale_Zeit = Zeit_aktualisieren()
+    _, lokale_Zeit,_ = Zeit_aktualisieren()
     read_sensor_data(lokale_Zeit)
     for key, value in sensor_data.items():
         print(f"{key}: {value}")

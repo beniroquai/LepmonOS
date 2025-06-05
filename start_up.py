@@ -21,31 +21,26 @@ from end import trap_shutdown
 if __name__ == "__main__":
     dim_down()
     turn_off_led("blau")
+    print("starte Setup")      
     RPI_time()
     on_start()
     
     Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
     date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
-    try:
-        display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png",1)
-        print("Wilkommen message 1 in Display")
-    except Exception as e:
-        print(f"Error displaying text on OLED: {e}")
-        print("Display not working")
-        for i in range (5):
-            turn_on_led("rot")
-            time.sleep(0.5)
-            turn_off_led("rot")
-            time.sleep(0.5)      
-    try:
-        time.sleep(2)
-        sn = read_fram(0x0110, 8).strip()
-        print(f"Serial Number from FRAM: {sn}")    
-    except Exception as e:
-        print("sn nicht vom Fram gelesen. nutze externe Datei")
-        sn = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
-        print(f"Serial Number from JSON: {sn}")
-        
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png",1)
+    print("Wilkommen message 1 in Display")
+
+    sn = None
+    while sn == None:
+        try:
+            time.sleep(2)
+            sn = read_fram(0x0110, 8).strip()
+            print(f"Serial Number from FRAM: {sn}")    
+        except Exception as e:
+            print("sn nicht vom Fram gelesen. nutze externe Datei")
+            sn = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
+            print(f"Serial Number from JSON: {sn}")
+        time.sleep(1)
     display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_2_9.png") 
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", sn)
 
@@ -105,4 +100,6 @@ if __name__ == "__main__":
         store_times_power(power_on, power_off)
     except Exception as e:
         print(f"Fehler beim Speichern der Zeiten: {e}")
-        print("Falle besitzt kein Power Management. Fahre fort")    
+        print("Falle besitzt kein Power Management. Fahre fort")
+        
+    print("beende Setup")        

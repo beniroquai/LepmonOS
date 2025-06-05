@@ -9,24 +9,26 @@ import subprocess
 import board
 from service import RPI_time
 
-i2c = board.I2C()
-rtc = adafruit_ds3231.DS3231(i2c)
 
 def input_time():
     print("Bitte Uhrzeit der Hardware Uhr Stellen")
-
+    rtc_status = False
     try:
+        i2c = board.I2C()
+        rtc = adafruit_ds3231.DS3231(i2c)
+        rtc_status = True
+
+    except Exception as e:
+        error_message(8, e)
+        # Fallback: Default-Werte
+        date_time_list = [2,0,2,4,0,1,0,1,0,0,0,0,0,0]    
+    if rtc_status:
+
         t = rtc.datetime
         time_string = f"{t.tm_year:04d}-{t.tm_mon:02d}-{t.tm_mday:02d} {t.tm_hour:02d}:{t.tm_min:02d}:{t.tm_sec:02d}"
         print(f"Aktuelle Hardware Uhrzeit: {time_string}")
         date_time_list = [int(digit) for digit in time_string if digit.isdigit()]
-        print("datetimelist")
-        print(date_time_list)
-    except Exception as e:
-        error_message(8, e)
-        time.sleep(5)
-        # Fallback: Default-Werte
-        date_time_list = [2,0,2,4,0,1,0,1,0,0,0,0,0,0]
+        print(f"Liste:{date_time_list}")
 
     aktuelle_position = 0
     Wahlmodus = 1  
@@ -200,6 +202,7 @@ def check_date_time():
     
 def set_hwc():
     _, _, _, _, _, _, date_time_list = input_time()
+    rtc_status = False
     while True:
         # Werte extrahieren
         jahr = int(f"{date_time_list[0]}{date_time_list[1]}{date_time_list[2]}{date_time_list[3]}")
@@ -215,6 +218,13 @@ def set_hwc():
             _, _, _, _, _, _, date_time_list = input_time()
             continue
         try:
+            i2c = board.I2C()
+            rtc = adafruit_ds3231.DS3231(i2c)
+            rtc_status = True
+        except Exception as e:
+            error_message(8, e)
+            display_text("Fehler 8", "Hardware Uhr", "nicht gefunden",3) 
+        if rtc_status:                               
             rtc_time = time.struct_time((
                 jahr, monat, tag, stunde, minute, sekunde,
                 0,  # weekday (ignored by DS3231)
@@ -225,9 +235,18 @@ def set_hwc():
             RPI_time()
             log_schreiben(f"Hardware Uhrzeit gesetzt auf: {rtc_time.tm_year}-{rtc_time.tm_mon:02d}-{rtc_time.tm_mday:02d} {rtc_time.tm_hour:02d}:{rtc_time.tm_min:02d}:{rtc_time.tm_sec:02d}")
             break
-        except Exception as e:
-            error_message(8, e)
-            display_text("Fehler beim Setzen", "der Uhrzeit!", "",3)
+        if not rtc_status:
+            
+            # Construct the command RPi internal time
+            system_time_str = f"{date_time_list[0]}{date_time_list[1]}{date_time_list[2]}{date_time_list[3]}-{date_time_list[4]}{date_time_list[5]}-{date_time_list[6]}{date_time_list[7]} {date_time_list[8]}{date_time_list[9]}:{date_time_list[10]}{date_time_list[11]}:{date_time_list[12]}{date_time_list[13]}"
+            print("Eingegebener Zeitsring:", system_time_str)
+    
+            subprocess.run(["sudo", "date", "-s", system_time_str], check=True)
+            log_schreiben(f"Harware Uhr konnte nicht gestellt werden. setze Uhrzeit des Raspberry auf:{date_time_list} ")
+            print(f"Raspberry Pi Systemzeit gesetzt auf: {system_time_str}")
+            display_text("Warnung: Nur","Raspberry Zeit","aktualisiert",3)
+            break
+
             _, _, _, _, _, _, date_time_list = input_time()
     time.sleep(0.5)
 

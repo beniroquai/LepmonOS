@@ -8,7 +8,7 @@ from log import log_schreiben
 def wait():
     
     experiment_start_time, experiment_end_time, LepiLed_end_time,time_buffer, lepi_led_buffer = get_experiment_times()
-    _, lokale_Zeit = Zeit_aktualisieren()
+    _, lokale_Zeit, _ = Zeit_aktualisieren()
     experiment_start_time = datetime.strptime(experiment_start_time, "%H:%M:%S")
     experiment_end_time = datetime.strptime(experiment_end_time, "%H:%M:%S")
     lokale_Zeit = datetime.strptime(lokale_Zeit, "%H:%M:%S")

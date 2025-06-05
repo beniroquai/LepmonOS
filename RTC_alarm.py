@@ -8,17 +8,20 @@ import adafruit_ds3231
 from error_handling import error_message
 from times import *
 
-i2c = board.I2C()
-rtc = adafruit_ds3231.DS3231(i2c)
+
+
 
 
 def set_alarm(power_on, power_off):
+    
     """
     Setzt den Alarm auf die RTC
     :param alaram: 1 oder 2
     :param timestring: String im Format "YYYY-MM-DD HH:MM:SS"
     """
+    i2c = board.I2C()
     try:
+        rtc = adafruit_ds3231.DS3231(i2c)
         alarm1_time = time.strptime(power_on, "%Y-%m-%d %H:%M:%S")
         rtc.alarm1 = (alarm1_time, "daily")
         rtc.alarm1_status = False
@@ -35,7 +38,7 @@ def set_alarm(power_on, power_off):
 
 
 if __name__ == "__main__":
-    now_str, _ = Zeit_aktualisieren()  # Angenommen, Zeit_aktualisieren gibt einen String zurück
+    now_str, _ ,_= Zeit_aktualisieren()  # Angenommen, Zeit_aktualisieren gibt einen String zurück
     now = datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")  # Konvertiere den String in ein datetime-Objekt
 
     now_plus_one_minute = (now + timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")

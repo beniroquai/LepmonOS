@@ -35,7 +35,7 @@ def get_usb_path():
             
 def erstelle_ordner():
     zielverzeichnis = get_usb_path()
-    jetzt_local, lokale_Zeit = Zeit_aktualisieren()
+    jetzt_local, _, _ = Zeit_aktualisieren()
     jetzt_local = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
     #jetzt_local = datetime.now()
     ordnername = f"{project_name}{sensor_id}_{province}_{city_code}_{jetzt_local.strftime('%Y')}-{jetzt_local.strftime('%m')}-{jetzt_local.strftime('%d')}_T_{jetzt_local.strftime('%H%M')}"
@@ -58,7 +58,7 @@ def initialisiere_logfile():
   aktueller_nachtordner = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","current_folder")
   #jetzt_local = datetime.now()
   #lokale_Zeit = jetzt_local.strftime("%H:%M:%S")
-  jetzt_local, lokale_Zeit = Zeit_aktualisieren()
+  jetzt_local, lokale_Zeit,_ = Zeit_aktualisieren()
   
   ordnername = os.path.basename(aktueller_nachtordner)
   log_dateiname = f"{ordnername}.log"
@@ -135,7 +135,7 @@ def RPI_time():
     """
     Funktion um die Zeit des Raspberry Pi zu setzen
     """
-    jetzt_local,_ = Zeit_aktualisieren()
+    jetzt_local,_ ,_= Zeit_aktualisieren()
     try:
         subprocess.run(['sudo', 'date', "-s", jetzt_local])
         print(f"Uhrzeit des Pi auf {jetzt_local} gestellt")

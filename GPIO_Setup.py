@@ -5,8 +5,9 @@ GPIO.setwarnings(False)
 # Definiere die Pin-Nummern für LEDs und Knöpfe
 LED_PINS = {
     'gelb': 22,    # GPIO 17 für gelbe LED
-    'blau': 6,    # GPIO 27 für blaue LED
-    'rot': 17      # GPIO 22 für rote LED
+    'blau': 6,     # GPIO 27 für blaue LED
+    'rot': 17,     # GPIO 22 für rote LED
+    'Kamera':28    # GPIO für Jörg 
 }
 
 BUTTON_PINS = {

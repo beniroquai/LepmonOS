@@ -13,7 +13,7 @@ from end import trap_shutdown
 def update_LepmonOS():
     usb_mount = get_usb_path()
     Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
-    timestamp,_ = Zeit_aktualisieren()
+    timestamp,_ ,_ = Zeit_aktualisieren()
     update_folder = os.path.join(usb_mount, "LepmonOS_update")
     target_folder = "/home/Ento/LepmonOS"
     backup_folder = target_folder + f"_backup_{Version}__{timestamp}"

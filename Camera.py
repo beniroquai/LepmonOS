@@ -7,7 +7,7 @@ import os
 import cv2
 from OLED_panel import display_text
 from log import log_schreiben
-from GPIO_Setup import button_pressed
+from GPIO_Setup import *
 from sensor_data import read_sensor_data
 from error_handling import error_message
 
@@ -68,14 +68,22 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     image_file = f"{code}.{file_extension}"
     dateipfad = os.path.join(ordnerpfad, image_file)
 
-    dim_up()
+    turn_on_led("Kamera")
+    print("Kamera Strom aktiviert")
 
-    print("dimme LED hoch")
+    
+    
     if mode == "display":
+        display_text("Kamera Test","Kamera wird", "eingeschaltet",5)
         display_text("Dimme LED","hoch","",1)
         ordnerpfad = "/home/Ento/LepmonOS/"
         power_on = 0
+        
+    if mode == "log":
+        time.sleep(5)    
 
+    dim_up()
+    print("dimme LED hoch")
     frame = get_frame(Exposure)
 
     if frame is not None:

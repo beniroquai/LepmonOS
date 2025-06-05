@@ -4,6 +4,8 @@ from luma.core.render import canvas
 from luma.oled.device import sh1106
 import time
 import os
+from GPIO_Setup import *
+
 oled_font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'FreeSans.ttf'), 14)
 
 # OLED-Setup
@@ -34,8 +36,13 @@ def display_text(line1, line2, line3, sleeptime =0):
             draw.text((5, 25), line2, font=oled_font, fill="white")
             draw.text((5, 45), line3, font=oled_font, fill="white")
         time.sleep(sleeptime) 
-    except:
-        pass       
+    except Exception as e:
+        print(f"Error displaying text on OLED: {e}")  
+        for _ in range(3):
+            turn_on_led("rot")
+            time.sleep(0.25)
+            turn_off_led("rot")
+            time.sleep(0.25)      
 
 
 def display_text_and_image(line1, line2, line3, image_path,sleeptime =0):
@@ -54,16 +61,29 @@ def display_text_and_image(line1, line2, line3, image_path,sleeptime =0):
             draw.text((5, 25), line2, font=oled_font, fill="white")
             draw.text((5, 45), line3, font=oled_font, fill="white")
             time.sleep(sleeptime)
-    except:
-        pass        
+    except Exception as e:
+        print(f"Error displaying text on OLED: {e}")        
+        for _ in range(3):
+            turn_on_led("rot")
+            time.sleep(0.25)
+            turn_off_led("rot")
+            time.sleep(0.25)        
     
 def display_text_with_arrows(line1, line2, line3, sleeptime=0):
-    with canvas(oled) as draw:
-        draw.rectangle(oled.bounding_box, outline="white", fill="black")
-        draw.text((5, 5), line1, font=oled_font, fill="white")
-        draw.text((5, 25), line2, font=oled_font, fill="white")
-        draw.text((5, 45), line3, font=oled_font, fill="white")
-        draw.text((110, 5), "▲", font=oled_font, fill="white")
-        draw.text((110, 25), "→", font=oled_font, fill="white")
-        draw.text((110, 45), "▼", font=oled_font, fill="white")
-    time.sleep(sleeptime)    
+    try:
+        with canvas(oled) as draw:
+            draw.rectangle(oled.bounding_box, outline="white", fill="black")
+            draw.text((5, 5), line1, font=oled_font, fill="white")
+            draw.text((5, 25), line2, font=oled_font, fill="white")
+            draw.text((5, 45), line3, font=oled_font, fill="white")
+            draw.text((110, 5), "▲", font=oled_font, fill="white")
+            draw.text((110, 25), "→", font=oled_font, fill="white")
+            draw.text((110, 45), "▼", font=oled_font, fill="white")
+        time.sleep(sleeptime)    
+    except Exception as e:
+        print(f"Error displaying text on OLED: {e}")
+        for _ in range(3):
+            turn_on_led("rot")
+            time.sleep(0.25)
+            turn_off_led("rot")
+            time.sleep(0.25)      

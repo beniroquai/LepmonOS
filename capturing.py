@@ -18,6 +18,7 @@ from fram_operations import *
 import struct
 import time
 
+print("starte Capturing")  
 wait()
 log_schreiben("Beginne Daten und Bildaufnahme")
 try: 
@@ -74,7 +75,7 @@ except Exception as e:
     print(f"Fehler beim Kopieren der Kameraeinstellungen: {e}")
 
 while True:
-    _, lokale_Zeit = Zeit_aktualisieren()
+    _, lokale_Zeit,_ = Zeit_aktualisieren()
     sensors = read_sensor_data("check Lux", lokale_Zeit)
     ambient_light = sensors["LUX"]
 
@@ -153,7 +154,7 @@ while True:
 
         last_image = datetime.strptime(lokale_Zeit, "%H:%M:%S")
         next_image = (last_image + timedelta(minutes=interval)).replace(second=0, microsecond=0)
-        _, lokale_Zeit = Zeit_aktualisieren()
+        _, lokale_Zeit,_ = Zeit_aktualisieren()
         lokale_Zeit = datetime.strptime(lokale_Zeit, "%H:%M:%S")
         time_to_next_image = (next_image - lokale_Zeit).total_seconds()
 

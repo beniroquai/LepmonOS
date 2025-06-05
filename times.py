@@ -10,17 +10,23 @@ import time
 import board
 import adafruit_ds3231
 
-i2c = board.I2C()
-rtc = adafruit_ds3231.DS3231(i2c)
+
 
 def Zeit_aktualisieren():
-    
-    t = rtc.datetime
-    dt = datetime(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
-    jetzt_local = dt.strftime("%Y-%m-%d %H:%M:%S")
-    lokale_Zeit = dt.strftime("%H:%M:%S")
-    
-    return jetzt_local, lokale_Zeit
+    i2c = board.I2C()
+    rtc_status = 0
+    try:
+        rtc = adafruit_ds3231.DS3231(i2c)
+        rtc_status = 1
+        t = rtc.datetime
+        dt = datetime(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
+        jetzt_local = dt.strftime("%Y-%m-%d %H:%M:%S")
+        lokale_Zeit = dt.strftime("%H:%M:%S")
+    except Exception as e:
+        error_message(8,e)
+        jetzt_local = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        lokale_Zeit = datetime.now().strftime("%H:%M:%S")
+    return jetzt_local, lokale_Zeit, rtc_status
 
 def berechne_zeitzone(latitude,longitude):
     latitude, longitude,_,_ = (get_coordinates())    
@@ -44,7 +50,7 @@ def get_sun():
     try:
         latitude, longitude,_,_ = (get_coordinates())
     except Exception as e:
-        error_message(11,e)
+        print(e)
     Zeitzone = berechne_zeitzone(latitude, longitude)
     observer = ephem.Observer()
     observer.lat = str(latitude)
@@ -53,7 +59,7 @@ def get_sun():
     jetzt_local_utc = jetzt_local.astimezone(pytz.utc)
     
     sunset = ephem.localtime(observer.next_setting(ephem.Sun(), start=jetzt_local_utc)) # Calculate times based on UTC time
-    
+    sunset = sunset - timedelta(days=1)
     next_day = jetzt_local + timedelta(days=1)# For the following day
     next_day_utc = next_day.astimezone(ephem.UTC)
 
@@ -81,6 +87,7 @@ def get_moon():
 
     # Mondaufgang und -untergang
     moonrise = ephem.localtime(observer.next_rising(ephem.Moon(), start=jetzt_local_utc))
+    moonrise = moonrise - timedelta(days=1)
     moonset = ephem.localtime(observer.next_setting(ephem.Moon(), start=jetzt_local_utc))
 
     # Mondphase (0=Neumond, 0.5=Vollmond)
@@ -95,8 +102,6 @@ def get_moon():
 
     return moonrise, moonset, moon_phase, max_altitude
 
-# Beispiel-Aufruf:
-
     
 def get_experiment_times():
     try:
@@ -106,7 +111,7 @@ def get_experiment_times():
     except Exception  as e:
         error_message(11,e)
     
-    jetzt_local, _ = Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
+    jetzt_local, _ , _= Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
     sunset, sunrise, _ = get_sun()
     
     # Berechnung der Zeiten für Dämmerung und Morgendämmerung
@@ -132,7 +137,7 @@ def get_times_power():
     latitude, longitude,_,_ = (get_coordinates()) 
 
     time_buffer = timedelta(minutes=int(get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "time_buffer")))
-    jetzt_local, _ = Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
+    jetzt_local, _ , _= Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
     sunset, sunrise, _ = get_sun()
     
     # Berechnung der Zeiten für Dämmerung und Morgendämmerung
@@ -149,7 +154,7 @@ def get_times_power():
     #times to write into FRam for power management 
 
 if __name__ == "__main__":
-    jetzt_local, lokale_Zeit = Zeit_aktualisieren()
+    jetzt_local, lokale_Zeit, _ = Zeit_aktualisieren()
     moonrise, moonset, moon_phase, max_altitude = get_moon()
     print(f"Mondaufgang: {moonrise}")
     print(f"Monduntergang: {moonset}")

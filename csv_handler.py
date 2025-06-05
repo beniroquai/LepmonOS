@@ -26,7 +26,7 @@ def erstelle_und_aktualisiere_csv(sensor_data):
     
 
     ### Metadata
-    jetzt_local, lokale_Zeit = Zeit_aktualisieren()
+    jetzt_local, lokale_Zeit,_ = Zeit_aktualisieren()
     latitude, longitude, _, _ = get_coordinates()
 
     sunset, sunrise, _ = get_sun()
@@ -46,11 +46,11 @@ def erstelle_und_aktualisiere_csv(sensor_data):
                 csv_writer.writerow(["#Longitude:",                 longitude]) 
                 csv_writer.writerow(["#Latitude:",                  latitude])
                 csv_writer.writerow([])
-                csv_writer.writerow(["#Sonnenuntergang:",           sunset.strftime("%H:%M:%S")])
-                csv_writer.writerow(["#Sonnenaufgang:",             sunrise.strftime("%H:%M:%S")])
+                csv_writer.writerow(["#Sonnenuntergang:",           sunset.strftime("%Y-%m-%d %H:%M:%S")])
+                csv_writer.writerow(["#Sonnenaufgang:",             sunrise.strftime("%Y-%m-%d %H:%M:%S")])
                 csv_writer.writerow([])
-                csv_writer.writerow(["#Mondaufgang:",               moonrise.strftime("%H:%M:%S")])
-                csv_writer.writerow(["#Monduntergang:",             moonset.strftime("%H:%M:%S")])
+                csv_writer.writerow(["#Mondaufgang:",               moonrise.strftime("%Y-%m-%d %H:%M:%S")])
+                csv_writer.writerow(["#Monduntergang:",             moonset.strftime("%Y-%m-%d %H:%M:%S")])
                 csv_writer.writerow(["#Mondphase:",                 round(moon_phase, 2)])
                 csv_writer.writerow(["#Maximale Kulminationshöhe:", round(max_altitude, 2)])
                 csv_writer.writerow([])

@@ -42,7 +42,7 @@ def display_sensor_status_with_text(sensor_data, sensor_status):
         log_schreiben(f"Sensor: {sensor_name},Status: {status}, Wert: {value} {einheit}")
 
 if __name__ == "__main__":
- 
+    print("starte lokales HMI")   
     Menu_open = False
     turn_on_led("blau")
     try:
@@ -99,10 +99,24 @@ if __name__ == "__main__":
                 turn_on_led("blau")                
                 user_selection_time = False
                 print("Zeitmenü anfang")
+                status_rtc = 0
+                com_rtc = 0
                 while not user_selection_time:
-                    jetzt_local,_ = Zeit_aktualisieren()
-                    jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S") 
-                    display_text(jetzt_local_dt.strftime("%Y-%m-%d"),jetzt_local_dt.strftime("%H:%M:%S"),"▲ = neu  ▼ = ok")
+                    if com_rtc < 2:
+                        try:
+                            jetzt_local, _, status_rtc = Zeit_aktualisieren()
+                            jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S") 
+                            com_rtc += 1
+                        except:
+                            jetzt_local = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
+                            com_rtc += 1
+                    else:
+                        jetzt_local = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
+
+                    display_text(jetzt_local_dt.strftime("%Y-%m-%d"), jetzt_local_dt.strftime("%H:%M:%S"), "▲ = neu  ▼ = ok",)
+
                     for _ in range(20):
                         if button_pressed("oben"):
                             turn_off_led("blau")
@@ -111,7 +125,6 @@ if __name__ == "__main__":
                             set_hwc()
                             log_schreiben("Menü zum aktualisieren der Uhrzeit geschlossen")
                             user_selection_time = True
-                            
                         if button_pressed("unten"):
                             log_schreiben("Uhrzeit nicht mit dem lokalen Interface aktualisiert")  
                             turn_off_led("blau")
@@ -145,7 +158,7 @@ if __name__ == "__main__":
                 display_text("Testlauf starten","","",2)
                 log_schreiben("Starte Systemcheck")
 
-                _,lokale_Zeit = Zeit_aktualisieren() 
+                _,lokale_Zeit,_ = Zeit_aktualisieren() 
                 read_sensor_data("Test_hmi",lokale_Zeit) 
                 display_sensor_data(sensor_data, sensor_status)  
 
@@ -222,4 +235,4 @@ if __name__ == "__main__":
             time.sleep(0.5)   
             turn_off_led("gelb")  
     
-    print("Continue")             
+    print("beende lokales HMI")             

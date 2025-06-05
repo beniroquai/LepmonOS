@@ -16,7 +16,7 @@
         "flash": 0.25,
         "interval": 2,
         "dusk_treshold": 90,
-        "initial_exposure": 80,
+        "initial_exposure": 135,
         "error_code":0
     },
     "GPS": {
@@ -26,7 +26,7 @@
         "Block": "E"
     },
     "software": {
-        "version": "2.0.7",
-        "date": "2025-06-02"
+        "version": "2.0.8",
+        "date": "2025-06-05"
     }
 }

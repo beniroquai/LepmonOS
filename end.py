@@ -24,7 +24,7 @@ def trap_shutdown(i):
     print(f"Fehlercode: {Errorcode}")
     
     if Errorcode > 0:
-        jetzt_local, _ = Zeit_aktualisieren()
+        jetzt_local, _,_ = Zeit_aktualisieren()
         jetzt_local_dt = datetime.strptime(jetzt_local, "%Y-%m-%d %H:%M:%S")
         print(f"Aktuelle Zeit: {jetzt_local}")
         
