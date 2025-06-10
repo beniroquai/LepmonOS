@@ -11,7 +11,6 @@ import subprocess
 try:
     project_name = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","project_name")
     sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","serielnumber")
-    print(f"Sensor ID: {sensor_id}")
     province = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","province")
     city_code = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","city")
 except Exception as e:
