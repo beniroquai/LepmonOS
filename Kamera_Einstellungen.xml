@@ -25,7 +25,7 @@
         <Feature Name="ExposureAutoMax" Type="Float" Access="R/W">9000018.000000</Feature>
         <Feature Name="ExposureAutoMin" Type="Float" Access="R/W">84.611000</Feature>
         <Feature Name="ExposureTime" Type="Float" Access="R/W">180000.0</Feature>
-        <Feature Name="Gain" Type="Float" Access="R/W">7.000000</Feature>
+        <Feature Name="Gain" Type="Float" Access="R/W">9.000000</Feature>
         <Feature Name="GainAuto" Type="Enumeration" Access="R/W">Off</Feature>
         <Feature Name="GainAutoMax" Type="Float" Access="R/W">27.000002</Feature>
         <Feature Name="GainAutoMin" Type="Float" Access="R/W">0.000000</Feature>

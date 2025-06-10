@@ -25,9 +25,11 @@ if __name__ == "__main__":
     RPI_time()
     on_start()
     
+    display_text_and_image("Beachte","Anlei-","tung!","/home/Ento/LepmonOS/startsequenz/link_manual.png",1)
+    time.sleep(8)
     Version = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
     date = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date") 
-    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png",1)
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_1_9.png",2)
     print("Wilkommen message 1 in Display")
 
     sn = None
@@ -41,7 +43,7 @@ if __name__ == "__main__":
             sn = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
             print(f"Serial Number from JSON: {sn}")
         time.sleep(1)
-    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_2_9.png") 
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_2_9.png",1) 
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", sn)
 
     send_lora("Starte Lepmon Software")
@@ -53,7 +55,7 @@ if __name__ == "__main__":
 
     set_serial_number()
     delete_error_code()
-    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_3_9.png")    
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_3_9.png",1)    
 
   
 
@@ -61,14 +63,15 @@ if __name__ == "__main__":
     write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log", "")
     print("Konfigurationsdatei zurückgesetzt")
     
-    for i in range(4, 6):
-        display_text_and_image("Will-","kommen", Version, f"/home/Ento/LepmonOS/startsequenz/Logo_{i}_9.png",1)
+    for i in range(4, 5):
+        display_text_and_image("Will-","kommen", Version, f"/home/Ento/LepmonOS/startsequenz/Logo_{i}_9.png",2)
 
     ordner = erstelle_ordner()
     if ordner == None:
         display_text("USB Stick","nicht erkannt","neu einstecken",3)
         trap_shutdown(60)
-        
+ 
+    display_text_and_image("Will-","kommen", Version, "/home/Ento/LepmonOS/startsequenz/Logo_6_9.png",1)        
     initialisiere_logfile()
 
         

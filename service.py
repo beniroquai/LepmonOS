@@ -20,18 +20,21 @@ except Exception as e:
 
 
 def get_usb_path():
-    """Ermittelt den Pfad des USB-Sticks."""
-    zielverzeichnis = ""
+    """Ermittelt den Pfad des USB-Sticks. Wiederholt, bis ein Stick gefunden wird."""
+    zielverzeichnis = None
     username = os.getenv('USER')
     media_path = f"/media/{username}"
-    if os.path.exists(media_path):
-        for item in os.listdir(media_path):
-            zielverzeichnis = os.path.join(media_path, item)
-            if os.path.ismount(zielverzeichnis):
-                USB_PATH = zielverzeichnis
-                print(f"USB stick gefunden: {zielverzeichnis}")
-                return zielverzeichnis
-    return None          
+    while zielverzeichnis is None:
+        if os.path.exists(media_path):
+            for item in os.listdir(media_path):
+                pot_dir = os.path.join(media_path, item)
+                if os.path.ismount(pot_dir):
+                    zielverzeichnis = pot_dir
+                    print(f"USB stick gefunden: {zielverzeichnis}")
+                    return zielverzeichnis
+        print("Kein USB-Stick gefunden, warte 2 Sekunden...")
+        time.sleep(2)
+    return zielverzeichnis      
             
 def erstelle_ordner():
     zielverzeichnis = get_usb_path()
@@ -72,6 +75,7 @@ def initialisiere_logfile():
                 print(f"logdatei erstellt:{log_dateipfad}")
                 write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log",log_dateipfad)
                 print(f"Pfad der Logdatei in der Konfigurationsdatei gespeichert")
+                time.sleep(2)
   except Exception as e:
         lokale_Zeit = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"{lokale_Zeit}; Fehler beim Erstellen des Logfiles: {e}")
