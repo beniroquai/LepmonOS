@@ -18,7 +18,7 @@ def trap_shutdown(i):
         Errorcode = int.from_bytes(read_fram_bytes(0x0810, 4), byteorder='big')
     except Exception as e:  
         try:
-            Errorcode = int(get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode"))
+            Errorcode = int(get_value_from_section("./config/Lepmon_config.json", "general", "errorcode"))
         except Exception:
             Errorcode = 0
     print(f"Fehlercode: {Errorcode}")

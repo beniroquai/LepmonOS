@@ -40,7 +40,7 @@ def get_frame_vimba(Exposure):
 
                 cam.set_pixel_format(PixelFormat.Bgr8)
 
-                settings_file = '/home/pi/LepmonOS/Kamera_Einstellungen.xml'.format(cam.get_id())
+                settings_file = './config/Kamera_Einstellungen.xml'.format(cam.get_id())
                 cam.load_settings(settings_file, PersistType.All)
 
                 
@@ -82,7 +82,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     print("dimme LED hoch")
     if mode == "display":
         display_text("Dimme LED","hoch","")
-        ordnerpfad = "/home/pi/LepmonOS/"
+        ordnerpfad = "./"
         power_on = 0
 
     if IS_IMSWITCH:

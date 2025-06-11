@@ -5,7 +5,7 @@ import time
 from json_read_write import *
 from log import log_schreiben
 
-with open("/home/pi/LepmonOS/sites.json", "r") as f:
+with open("./config/sites.json", "r") as f:
     data = json.load(f)
 
 

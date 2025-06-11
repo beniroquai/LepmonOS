@@ -186,7 +186,7 @@ def main_loop():
         ordner      = get_value_from_section(CONFIG_PATH, "general", "current_folder")
         Dateiname   = os.path.basename(ordner)
         zieldatei   = os.path.join(ordner, f"{Dateiname}_Kameraeinstellungen.xml")
-        shutil.copy("/home/pi/LepmonOS/Kamera_Einstellungen.xml", zieldatei)
+        shutil.copy("./config/Kamera_Einstellungen.xml", zieldatei)
         checksum(zieldatei, algorithm="md5")
     except Exception:
         pass

@@ -37,11 +37,11 @@ def set_serial_number():
     """  
     try:
         SN = read_fram(0x0110, 8)
-        write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "serielnumber", SN)
+        write_value_to_section("./config/Lepmon_config.json", "general", "serielnumber", SN)
         print("Seriennummer in config geschrieben")
     except Exception as e:
         try:
-            SN = get_value_from_section("/home/Ento/serial_number.json", "general", "serielnumber")
+            SN = get_value_from_section("./config/LepmonOS_serial_number.json", "general", "serielnumber")
             print("Seriennummer aus JSON gelesen")
         except Exception as e:
             print("Seriennummer konnte nicht gesetzt werden")
@@ -58,7 +58,7 @@ def delete_error_code():
         print("Fehlercode in FRAM nicht gelöscht")
         
     try:
-        write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "errorcode", "0")
+        write_value_to_section("./config/Lepmon_config.json", "general", "errorcode", "0")
         print("Fehlercode in config auf 0 gesetzt")
     except Exception as e:
         print("Fehlercode in config nicht gelöscht")
@@ -82,8 +82,8 @@ def check_version():
     """
     Funktion um die Version der Software zu überprüfen
     """
-    Version_json = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "version")
-    date_json = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "software", "date")
+    Version_json = get_value_from_section("./config/Lepmon_config.json", "software", "version")
+    date_json = get_value_from_section("./config/Lepmon_config.json", "software", "date")
     print(f"Software- Version: {Version_json} vom {date_json}")
     try:
         Version_fram = read_fram(0x0130, 8)
