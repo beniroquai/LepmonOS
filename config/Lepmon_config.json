@@ -2,8 +2,8 @@
     "general": {
         "serielnumber": "SN999999",
         "project_name": "Lepmon#",
-        "current_folder": "/media/Ento/Biophysik1/Lepmon#SN999999_TH_J_2025-05-14_T_2314",
-        "current_log": "/media/Ento/Biophysik1/Lepmon#SN999999_TH_J_2025-05-14_T_2314/Lepmon#SN999999_TH_J_2025-05-14_T_2314.log"
+        "current_folder": "/media/Ento/0A80-304D/Lepmon#SN999999_TH_J_2024-02-03_T_1855",
+        "current_log": "/media/Ento/0A80-304D/Lepmon#SN999999_TH_J_2024-02-03_T_1855/Lepmon#SN999999_TH_J_2024-02-03_T_1855.log"
     },
     "locality": {
         "country": "Germany",
@@ -19,10 +19,9 @@
         "initial_exposure": 170
     },
     "GPS": {
-        "latitude": 51.924009,
+        "latitude": 50.924009,
         "Pol": "N",
         "longitude": 11.584009,
-        "Block": "E",
-        "Orientation": "West"
+        "Block": "E"
     }
 }

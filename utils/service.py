@@ -1,17 +1,16 @@
 import os
 from datetime import datetime
-from json_read_write import *
-from times import *
+from utils.json_read_write import *
 import hashlib
-from error_handling import error_message
+from utils.error_handling import error_message
 import time
-from times import *
+from utils.times import *
 
 try:
-    project_name = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","project_name")
-    sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","serielnumber")
-    province = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","province")
-    city_code = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","locality","city")
+    project_name = get_value_from_section("./config/Lepmon_config.json","general","project_name")
+    sensor_id = get_value_from_section("./config/Lepmon_config.json","general","serielnumber")
+    province = get_value_from_section("./config/Lepmon_config.json","locality","province")
+    city_code = get_value_from_section("./config/Lepmon_config.json","locality","city")
 except Exception as e:
     error_message(11,e)
     
@@ -43,7 +42,7 @@ def erstelle_ordner():
             aktueller_nachtordner = os.path.join(zielverzeichnis, ordnername)
             os.makedirs(aktueller_nachtordner, exist_ok=True)
             print(f"Ordner erstellt: {aktueller_nachtordner}")
-            write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_folder",aktueller_nachtordner)
+            write_value_to_section("./config/Lepmon_config.json", "general", "current_folder",aktueller_nachtordner)
             print("Pfad des Ausgabe Ordner in der Konfigurationsdatei gespeichert")
     
     except Exception as e:
@@ -52,7 +51,7 @@ def erstelle_ordner():
 
 
 def initialisiere_logfile():
-  aktueller_nachtordner = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","current_folder")
+  aktueller_nachtordner = get_value_from_section("./config/Lepmon_config.json","general","current_folder")
   #jetzt_local = datetime.now()
   #lokale_Zeit = jetzt_local.strftime("%H:%M:%S")
   jetzt_local, lokale_Zeit = Zeit_aktualisieren()
@@ -67,7 +66,7 @@ def initialisiere_logfile():
             with open(log_dateipfad, 'w') as f:
                 f.write(f"{lokale_Zeit}; Logfile erstellt: {log_dateipfad}\n")
                 print(f"logdatei erstellt:{log_dateipfad}")
-                write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "general", "current_log",log_dateipfad)
+                write_value_to_section("./config/Lepmon_config.json", "general", "current_log",log_dateipfad)
                 print(f"Pfad der Logdatei in der Konfigurationsdatei gespeichert")
   except Exception as e:
         lokale_Zeit = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

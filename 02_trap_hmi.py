@@ -1,18 +1,23 @@
-from Camera import snap_image
-from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
-import time
-from RTC_new_time import set_hwc
-from coordinates import set_coordinates
-from times import *
-from json_read_write import *
+from utils.Camera import snap_image
+from utils.GPIO_Setup import turn_on_led, turn_off_led, button_pressed
+from utils.OLED_panel import display_text
+from utils.RTC_new_time import set_hwc
+from utils.coordinates import set_coordinates
+from utils.times import *
+from utils.json_read_write import *
+from utils.sensor_data import *
+from utils.service import *
+from utils.log import log_schreiben
+from utils.Lights import *
+from utils.find_focus import focus
+from utils.site_selection import set_location_code
+from utils.wait import wait 
+from utils.fram_operations import *
+from utils.updater import update
+from utils.end import trap_shutdown 
+
 import json
-from sensor_data import *
-from service import *
-from log import log_schreiben
-from Lights import *
-from find_focus import focus
-from site_selection import set_location_code
+import time
 import os
 
 latitude, longitude,_,_ = (get_coordinates())
@@ -23,25 +28,26 @@ def display_sensor_status_with_text(sensor_data, sensor_status):
     Gibt die Sensorinformationen mit display_text aus.
     1. Zeile: Sensorname (wie in sensor_status angegeben)
     2. Zeile: Sensorzustand (OK oder Fehler)
-    3. Zeile: Erster Wert, den der Sensor in sensor_data schreibt.
+    3. Zeile: Erster Wert, den der Sensor in sensor_data schreibt, inkl. Einheit.
 
     :param sensor_data: Dictionary mit den Sensor-Daten.
     :param sensor_status: Dictionary mit den Sensor-Status-Werten.
     """
-    # Zu überprüfende Sensoren und ihre entsprechenden Datenfelder
+    # Sensoren, Datenfeld und Einheit
     sensors = [
-        ("Light_Sensor", "LUX"),
-        ("Inner_Sensor", "Temp_in"),
-        ("Power_Sensor", "bus_voltage"),
-        ("Environment_Sensor", "Temp_out")
+        ("Light_Sensor", "LUX", "Lux"),
+        ("Inner_Sensor", "Temp_in", "°C"),
+        ("Power_Sensor", "bus_voltage", "V"),
+        ("Environment_Sensor", "Temp_out", "°C")
     ]
 
-    for sensor_name, data_key in sensors:
-        # Sensorzustand prüfen
-        status = "OK" if sensor_status.get(sensor_name, 0) == 1 else "Fehler"
-
-        # Sensorwert abrufen
+    for sensor_name, data_key, einheit in sensors:
+        status_value = sensor_status.get(sensor_name, 0)
+        status = "OK" if str(status_value) == "1" or status_value == 1 else "Fehler"
         value = sensor_data.get(data_key, "---")
+        # Wert und Einheit zusammen anzeigen
+        display_text(sensor_name, f"Status: {status}", f"Wert: {value} {einheit}",2.5)
+        log_schreiben(f"Sensor: {sensor_name},Status: {status}, Wert: {value} {einheit}")
 
         # Informationen auf dem Display ausgeben
         display_text(sensor_name, f"Status: {status}", f"Wert: {value}")
@@ -70,6 +76,23 @@ for _ in range(100): #200
                 log_schreiben("Fokussieren beendet")
                 user = 1
                 
+            if button_pressed("oben"):
+                print("Oben gedrückt. Öffne Update Menü")
+                display_text("Update Menü", "geöffnet", "")
+                log_schreiben("Update Menü geöffnet")
+                try:
+                    ram_counter(0x0330)
+                except:
+                    pass
+                try:
+                    update()
+                except Exception as e:
+                    print(f"Update menu error: {e}")
+                    display_text("Update Fehler", "Versuche später", "erneut")
+                    time.sleep(3)
+                log_schreiben("Update Menü geschlossen, fahre fort")
+                user = 1
+                
             if button_pressed("enter"):
                 display_text("Bitte Land,", "Provinz und","Stadcode wählen")
                 log_schreiben("Menü zum Ändern der Provinz und Stadtkürzel geöffnet. Erwarte Neustart nach Ende des Meüpunktes")
@@ -96,7 +119,7 @@ for _ in range(100): #200
         jetzt_local,_ = Zeit_aktualisieren()
         for i in range(5):
             _,lokale_Zeit = Zeit_aktualisieren()    
-            display_text("aktuelle Uhrzeit", lokale_Zeit,"")
+            display_text("aktuelle Uhrzeit", jetzt_local,"")
             time.sleep(1)
 
         display_text("Uhrzeit mit","rechter Taste", "neu stellen")  
@@ -174,6 +197,7 @@ for _ in range(100): #200
         break
     
     time.sleep(.05)
-if not Menu_open:
+if Menu_open:
     log_schreiben("Falle nicht mit lokalem User Interface parametrisiert")
 print("Continue with wait")    
+wait()

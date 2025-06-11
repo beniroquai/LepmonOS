@@ -9,11 +9,11 @@ import smbus2
 import json
 import os
 import logging
-from service import log_schreiben
-from json_read_write import get_value_from_section
-from error_handling import error_message
+from utils.service import log_schreiben
+from utils.json_read_write import get_value_from_section
+from utils.error_handling import error_message
 
-from times import *
+from utils.times import *
 
 
 os.system('sudo raspi-config nonint do_i2c 0') # I2C aktivieren
@@ -31,7 +31,7 @@ def update_sensor_data(lib,key, value):
 
 def read_sensor_data(code,lokale_Zeit):
     try:
-        Dämmerungsschwellenwert = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "capture_mode", "dusk_treshold")
+        Dämmerungsschwellenwert = get_value_from_section("./config/Lepmon_config.json", "capture_mode", "dusk_treshold")
     except Exception as e:
         error_message(11,e)
     update_sensor_data(sensor_data, "code", code)
@@ -116,8 +116,8 @@ def read_sensor_data(code,lokale_Zeit):
     return sensor_data
 
 def write_sensor_data_to_json(sensor_data,sensor_status):
-    file_path_data = "sensor_values.json"  # Datei im gleichen Ordner
-    file_path_status = "sensor_status.json"
+    file_path_data = "./config/sensor_values.json"  # Datei im gleichen Ordner
+    file_path_status = "./config/sensor_status.json"
 
     try:
         with open(file_path_data, "w") as json_file:

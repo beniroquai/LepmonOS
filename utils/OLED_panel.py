@@ -8,8 +8,30 @@ oled_font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'FreeSans
 
 # OLED-Setup
 Display = i2c(port=1, address=0x3C)
-oled = sh1106(Display)
-oled_font = ImageFont.truetype('FreeSans.ttf', 14)
+try:
+    oled = sh1106(Display)
+except:
+    # dummy class for OLED in case it'S not connected
+    class ssh1106_:
+        def __init__(self, Display):
+            pass
+
+        def bounding_box(self):
+            return (0, 0, 128, 64)
+
+        def clear(self):
+            pass
+
+        def show(self):
+            pass
+
+        def text(self, position, text, font, fill):
+            pass
+
+        def bitmap(self, position, image, fill):
+            pass
+        
+    oled = ssh1106_(Display)
 
 # Funktion, um Text auf dem OLED anzuzeigen
 def display_text(line1, line2, line3):

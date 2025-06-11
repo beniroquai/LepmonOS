@@ -17,30 +17,41 @@ def wait():
     print(f"LepiLed_buffer: {lepi_led_buffer}")
 
     log_schreiben(f"Zeitpuffer vor Sonnenuntergang und Nach Sonnenaufgang: {time_buffer}")    
-    log_schreiben(f"LepiLED wird {lepi_led_buffer} vor Sonnenaufgang ausgeschaltet: {LepiLed_end_time}") 
+    log_schreiben(f"LepiLED wird {lepi_led_buffer} vor Sonnenaufgang ({experiment_end_time.strftime('%H:%M:%S')}) ausgeschaltet: {LepiLed_end_time}") 
     
-    print(f"experiment_end_time: {experiment_end_time}")
-    print(F"jetzt : {lokale_Zeit}")
-    print(f"experiment_start_time: {experiment_start_time}")
     
-    #if not (experiment_end_time > lokale_Zeit >= experiment_start_time):
-    if experiment_end_time >= lokale_Zeit or experiment_start_time <= lokale_Zeit:
+    if not (experiment_end_time > lokale_Zeit >= experiment_start_time):
         print("Aktuelle Zeit liegt nach geplantem Nachtbeginn. Warte nicht sondern fahre fort")
         log_schreiben("Aktuelle Zeit liegt nach geplantem Nachtbeginn. Starte Schleife")
         pass
 
-    else:
+    elif (experiment_start_time - lokale_Zeit).total_seconds() >= 120 and (experiment_end_time > lokale_Zeit >= experiment_start_time):
         countdown = (experiment_start_time - lokale_Zeit).total_seconds()
         countdown_time = experiment_start_time - lokale_Zeit
+        countdown = (experiment_start_time - lokale_Zeit).total_seconds()
         log_schreiben(f"warte bis Nachtbeginn: {countdown_time}")
-        print(f"warten bis zum Experiment Beginn: {countdown_time}")
 
-        for _ in range(60):
+        for _ in range(120):
             hours, remainder = divmod(int(countdown), 3600)  # Stunden berechnen
             minutes, seconds = divmod(remainder, 60)  # Minuten und Sekunden berechnen
             display_text("Beginne in", f"{hours:02d}:{minutes:02d}:{seconds:02d}", "")
             countdown -= 1  # Eine Sekunde abziehen
             time.sleep(1)
-        display_text("", "", "")
-        countdown -=60
-        time.sleep(countdown)
+        _, lokale_Zeit = Zeit_aktualisieren() 
+        difference = (experiment_start_time - lokale_Zeit).total_seconds()
+        print(f"warten bis zum Experimentbeginn: {difference}")
+        time.sleep(difference)
+
+
+
+    elif 0< (experiment_start_time - lokale_Zeit).total_seconds() < 120 and (experiment_end_time > lokale_Zeit >= experiment_start_time):
+        countdown = (experiment_start_time - lokale_Zeit).total_seconds()
+        countdown_time = experiment_start_time - lokale_Zeit
+        log_schreiben(f"warte bis Nachtbeginn: {countdown_time}")
+
+        for _ in range(countdown):
+            hours, remainder = divmod(int(countdown), 3600)  # Stunden berechnen
+            minutes, seconds = divmod(remainder, 60)  # Minuten und Sekunden berechnen
+            display_text("Beginne in", f"{hours:02d}:{minutes:02d}:{seconds:02d}", "")
+            countdown -= 1  # Eine Sekunde abziehen
+            time.sleep(1)        

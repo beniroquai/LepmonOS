@@ -1,13 +1,13 @@
 from datetime import datetime
-from json_read_write import get_value_from_section
-from lora import send_lora
+from utils.json_read_write import get_value_from_section
+from utils.lora import send_lora
 
-def log_schreiben(text):
+
+def log_schreiben(text, mPath="./config/Lepmon_config.json"):
     """Schreibt den übergebenen Text in das Logfile."""
     lokale_Zeit = datetime.now()
-    lokale_Zeit = lokale_Zeit.strftime("%H:%M:%S")
     try:
-        log_dateipfad = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","current_log")
+        log_dateipfad = get_value_from_section(mPath,"general","current_log")
     except Exception as e:
         send_lora(f"Fehler 11: Konfigurationsdatei 'Lepmon_config.json' nicht gefunden oder Wert fehlerhaft:{e}")
         return 

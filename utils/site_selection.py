@@ -5,7 +5,7 @@ import time
 from json_read_write import *
 from log import log_schreiben
 
-with open("/home/Ento/LepmonOS/sites.json", "r") as f:
+with open("/home/pi/LepmonOS/sites.json", "r") as f:
     data = json.load(f)
 
 
@@ -13,9 +13,9 @@ with open("/home/Ento/LepmonOS/sites.json", "r") as f:
 
 
 def set_location_code():
-    country_old = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "country")
-    province_old = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "province")
-    city_code_old = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "city")
+    country_old = get_value_from_section("./config/Lepmon_config.json", "locality", "country")
+    province_old = get_value_from_section("./config/Lepmon_config.json", "locality", "province")
+    city_code_old = get_value_from_section("./config/Lepmon_config.json", "locality", "city")
     level = "country"
     index = 0
     country = None
@@ -82,9 +82,9 @@ def set_location_code():
         
     
     
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "country", country)   
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "province",province_code)
-    write_value_to_section("/home/Ento/LepmonOS/Lepmon_config.json", "locality", "city",city_code)
+    write_value_to_section("./config/Lepmon_config.json", "locality", "country", country)   
+    write_value_to_section("./config/Lepmon_config.json", "locality", "province",province_code)
+    write_value_to_section("./config/Lepmon_config.json", "locality", "city",city_code)
     print("saved information on location code in configuration file")
         
     new = False

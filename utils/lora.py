@@ -1,5 +1,5 @@
 import serial
-from json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section
 
 try:
     uart = serial.Serial("/dev/serial0", 9600, timeout=1)
@@ -9,7 +9,7 @@ except Exception as e:
 
 def send_lora(main_message):
     try:
-        sensor_id = get_value_from_section("/home/Ento/LepmonOS/Lepmon_config.json","general","serielnumber")
+        sensor_id = get_value_from_section("./config/Lepmon_config.json","general","serielnumber")
         message = f"{sensor_id} start of message\n{main_message}\n{sensor_id} end of message"
     except Exception as e:
         print("Fehler im senden der Nachricht")
