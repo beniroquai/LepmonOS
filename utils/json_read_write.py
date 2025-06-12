@@ -1,6 +1,50 @@
 import json
 import os 
 
+def read_json(file_path):
+    """
+    Reads and returns the entire JSON content from a file.
+    
+    Args:
+        file_path (str): Path to the JSON file
+        
+    Returns:
+        dict: Parsed JSON data or None if error occurs
+    """
+    try:
+        with open(file_path, "r") as json_file:
+            return json.load(json_file)
+    except FileNotFoundError:
+        print(f"Die Datei {file_path} wurde nicht gefunden.")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Fehler beim Parsen der JSON-Datei: {e}")
+        return None
+    except Exception as e:
+        print(f"Fehler beim Lesen der JSON-Datei: {e}")
+        return None
+
+
+def write_json(file_path, data):
+    """
+    Writes data to a JSON file.
+    
+    Args:
+        file_path (str): Path to the JSON file
+        data (dict): Data to write to the file
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with open(file_path, "w") as json_file:
+            json.dump(data, json_file, indent=4)
+        return True
+    except Exception as e:
+        print(f"Fehler beim Schreiben der JSON-Datei: {e}")
+        return False
+
+
 def get_value_from_section(file_path, section_name, key_name):
     try:
         # JSON-Datei öffnen und laden
