@@ -5,7 +5,11 @@ import time
 from .json_read_write import *
 from .log import log_schreiben
 
-with open("./config/sites.json", "r") as f:
+# get path of the current script
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(current_dir.split("utils")[0], "config/sites.json"), "r") as f:
     data = json.load(f)
 
 

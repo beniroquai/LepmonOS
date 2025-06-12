@@ -136,6 +136,13 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     return code, dateipfad, Status_Kamera, power_on, Kamera_Fehlerserie   
 
 
+def get_frame():
+    if IS_VIMBA:
+        return get_frame_vimba(Exposure=0.02)
+    else:
+        error_message(11, "Vimba ist nicht verfügbar. Bitte installieren Sie es oder verwenden Sie IMSwitch.")
+        return None
+
 
 if __name__ == "__main__":
     print("Starte Kamera...")

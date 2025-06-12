@@ -81,9 +81,11 @@ def get_sun():
 
 def get_experiment_times():
     try:
+        import os 
+        config_dir = os.path.dirname(os.path.abspath(__file__)).split("utils")[0]
         latitude, longitude,_,_ = (get_coordinates()) 
-        lepi_led_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "LepiLed_buffer")))
-        time_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "time_buffer")))  
+        lepi_led_buffer = timedelta(minutes=int(get_value_from_section(os.path.join(config_dir, "config/Lepmon_config.json"), "capture_mode", "LepiLed_buffer")))
+        time_buffer = timedelta(minutes=int(get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "capture_mode", "time_buffer")))  
     except Exception  as e:
         error_message(11,e)
     
