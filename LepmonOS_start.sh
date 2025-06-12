@@ -52,12 +52,15 @@ declare -x XDG_VTNR="7"
 declare -x _JAVA_AWT_WM_NONREPARENTING="1"
 
 sudo raspi-config nonint do_i2c 0
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # list the Lepmon folder and subfolders 
-ls -R ~/LepmonOS
-# list the content of the Lepmon folder
-cd ~/LepmonOS
+ls -R "$SCRIPT_DIR"
+# Change to the script directory
+cd "$SCRIPT_DIR"
 python3 00_start_up.py
-#python3 ~/LepmonOS/01_start_up.py
 python3 02_trap_hmi.py
 python3 03_capturing.py
 python3 04_end.py

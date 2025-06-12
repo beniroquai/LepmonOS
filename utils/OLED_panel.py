@@ -4,7 +4,17 @@ from luma.core.render import canvas
 from luma.oled.device import sh1106
 import time
 import os
-oled_font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'FreeSans.ttf'), 14)
+# Try to load custom font, fallback to default font if not available
+try:
+    oled_font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), 'FreeSans.ttf'), 14)
+except (OSError, IOError):
+    # Fallback to default font if FreeSans.ttf is not found
+    try:
+        # Try common system fonts
+        oled_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)
+    except (OSError, IOError):
+        # Final fallback to PIL's default font
+        oled_font = ImageFont.load_default()
 
 # OLED-Setup
 Display = i2c(port=1, address=0x3C)
