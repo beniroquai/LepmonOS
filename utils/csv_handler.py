@@ -1,9 +1,9 @@
 import os
 import csv
-from json_read_write import get_value_from_section
+from .json_read_write import get_value_from_section
 from datetime import datetime
-from times import *
-from error_handling import error_message
+from .times import *
+from .error_handling import error_message
 
 def erstelle_und_aktualisiere_csv(sensor_data):
     try:

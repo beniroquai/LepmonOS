@@ -1,10 +1,10 @@
 import time
 from datetime import datetime
-from GPIO_Setup import turn_on_led, turn_off_led, button_pressed
-from OLED_panel import display_text
+from .GPIO_Setup import turn_on_led, turn_off_led, button_pressed
+from .OLED_panel import display_text
 import adafruit_ds3231
-from log import log_schreiben
-from error_handling import error_message
+from .log import log_schreiben
+from .error_handling import error_message
 import subprocess
 import board
 

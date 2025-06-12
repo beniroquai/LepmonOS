@@ -1,9 +1,9 @@
-from GPIO_Setup import button_pressed
-from OLED_panel import display_text
+from .GPIO_Setup import button_pressed
+from .OLED_panel import display_text
 import json
 import time
-from json_read_write import *
-from log import log_schreiben
+from .json_read_write import *
+from .log import log_schreiben
 
 with open("./config/sites.json", "r") as f:
     data = json.load(f)

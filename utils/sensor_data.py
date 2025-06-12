@@ -1,6 +1,6 @@
 import adafruit_bh1750      #Lichtsensor
 import bme280               #Außensensor
-from ina226 import INA226   #Strommesser
+from .ina226 import INA226   #Strommesser
 import adafruit_pct2075     #Innensensor
 import time
 import board

@@ -1,11 +1,11 @@
-from OLED_panel import display_text
-from Camera import get_frame
-from GPIO_Setup import button_pressed
+from .OLED_panel import display_text
+from .Camera import get_frame
+from .GPIO_Setup import button_pressed
 import time
 import cv2
-from error_handling import error_message
+from .error_handling import error_message
 import sys
-from Lights import *
+from .Lights import *
 
 
 def set_exposure(Belichtungszeit):

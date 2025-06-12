@@ -5,8 +5,8 @@ import time
 from datetime import datetime, timedelta
 import board
 import adafruit_ds3231
-from error_handling import error_message
-from times import *
+from .error_handling import error_message
+from .times import *
 
 i2c = board.I2C()
 rtc = adafruit_ds3231.DS3231(i2c)

@@ -8,7 +8,7 @@ from utils.OLED_panel import display_text
 import time
 from utils.json_read_write import get_value_from_section
 from utils.log import log_schreiben
-from end import trap_shutdown
+from .end import trap_shutdown
 
 def update_LepmonOS():
     usb_mount = get_usb_path()

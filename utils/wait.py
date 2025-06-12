@@ -1,8 +1,8 @@
-from OLED_panel import display_text
+from .OLED_panel import display_text
 import time
 from datetime import datetime
-from times import *
-from log import log_schreiben
+from .times import *
+from .log import log_schreiben
 
 
 def wait():
