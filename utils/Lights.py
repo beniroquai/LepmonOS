@@ -25,7 +25,9 @@ def dim_up():
         
       
 def dim_down(): 
-  flash = get_value_from_section("./config/Lepmon_config.json","capture_mode","flash") 
+  import os 
+  current_dir = os.path.dirname(os.path.abspath(__file__))    
+  flash = get_value_from_section(os.path.join(current_dir.split("utils")[0],"config/Lepmon_config.json"),"capture_mode","flash") 
   dimmer_pwm.start(100)
   for duty_cycle in range(99, 0, -1):
         dimmer_pwm.ChangeDutyCycle(duty_cycle)

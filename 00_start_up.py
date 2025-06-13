@@ -1,5 +1,5 @@
 from utils.times import get_times_power
-from utils.OLED_panel import display_text, display_text_and_image
+from utils.OLED_panel import display_text, display_image
 from utils.service import *
 from utils.log import log_schreiben
 from utils.lora import send_lora
@@ -25,12 +25,12 @@ if __name__ == "__main__":
     dim_down()
     turn_off_led("blau")
     print("starte Setup")      
-    RPI_time()
+    # RPI_time()
     on_start()
     
     # Display manual link image
     try:
-        display_text_and_image("Beachte","Anlei-","tung!","./startsequence/link_manual.png",1)
+        display_image("./startsequence/link_manual.png")
         time.sleep(8)
     except Exception as e:
         print(f"Could not display manual link: {e}")
@@ -48,8 +48,9 @@ if __name__ == "__main__":
     
     # Logo startup sequence
     try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))    
         for i in range(1, 10):
-            display_text_and_image("Will-","kommen", Version, f"./startsequence/Logo_{i}_9.png",1)
+            display_image(os.path.join(current_dir,f"startsequence/Logo_{i}_9.png"))
             time.sleep(1)
         print("Logo sequence completed")
     except Exception as e:

@@ -47,8 +47,10 @@ def write_json(file_path, data):
 
 def get_value_from_section(file_path, section_name, key_name):
     try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
         # JSON-Datei öffnen und laden
-        with open(file_path, "r") as json_file:
+        with open(os.path.join(current_dir.split("utils")[0], file_path), "r") as json_file:
             data = json.load(json_file)
         
         # Prüfen, ob die Sektion existiert
@@ -93,10 +95,11 @@ def get_coordinates():
 
 
 def write_value_to_section(file_path, section_name, key_name, value):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     try:
         # JSON-Datei laden oder erstellen, falls sie nicht existiert
         try:
-            with open(file_path, "r") as json_file:
+            with open(os.path.join(current_dir,file_path), "r") as json_file:
                 data = json.load(json_file)
         except FileNotFoundError:
             data = {}  # Leeres Dictionary, falls die Datei nicht existiert

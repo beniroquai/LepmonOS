@@ -33,14 +33,16 @@ from utils.fram_operations import *
 from utils.fram_direct import write_fram_bytes, read_fram_bytes
 from utils.wait import wait
 import struct
-
+import os 
 stop_event = threading.Event()      # shared shutdown flag
 
 
 # ────── paths / constants ─────────────────────────────────────────────────────
+
 CONFIG_PATH = "./config/Lepmon_config.json"
 LOG_PATH    = CONFIG_PATH
 API_PORT    = 8000
+OVERRIDE_TIMECHECK = True
 
 # ────── globals (shared with API)──────────────────────────────────────────────
 current_params_lock  = threading.Lock()
@@ -197,7 +199,8 @@ def main_loop():
         ambient_light  = sensors["LUX"]
 
         if (ambient_light <= dusk_treshold and not experiment_end_time <= lokale_Zeit <= experiment_start_time) or\
-           (ambient_light > dusk_treshold and not sunrise <= lokale_Zeit <= experiment_start_time):
+           (ambient_light > dusk_treshold and not sunrise <= lokale_Zeit <= experiment_start_time) or \
+               OVERRIDE_TIMECHECK:
 
             if not Fang_begonnen:
                 LepiLED_start()
@@ -267,7 +270,7 @@ def main_loop():
             time.sleep(max(time_to_next_image, 0))
 
         else:
-            checksum(csv_path, algorithm="md5")
+            # checksum(csv_path, algorithm="md5")
             append_log("Beende Aufnahme Schleife. Leite zum Ausschalten über")
             checksum(LOG_PATH, algorithm="md5")
             break

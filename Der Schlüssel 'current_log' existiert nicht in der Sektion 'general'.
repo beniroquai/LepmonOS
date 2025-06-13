@@ -1,0 +1,6 @@
+2025-06-13 19:54:50.832463; Fehler 3: USB Stick nicht gefunden. Anschluss prüfen: expected str, bytes or os.PathLike object, not NoneType
+2025-06-13 10:11:45.004462; Startup: System initialization completed
+2025-06-13 19:54:55.968791; Fehler 11: Checksumme für Bild,logfile oder Metadatentabelle nicht ermittelt: could not convert string to float: "Die Sektion 'GPS' existiert nicht in der Datei.Die Sektion 'GPS' existiert nicht in der Datei."
+2025-06-13 19:54:56.078222; Fehler 12: Beleuchtungs LED ist verdunkelt. Leistung LepiLED (in W):: Sun time calculation error: cannot access local variable 'latitude' where it is not associated with a value
+2025-06-13 19:54:56.188304; Fehler 9: Fehler in der Kommunikation zwischen Raspberry Pi und Fram Modul: Fehler in der Kommunikation zwischen Raspberry Pi und Fram Modul. Zeiten für An und Ausschalten der Falle nicht aktualisiert.
+2025-06-13 19:56:13.262620; Fehler 9: Fehler in der Kommunikation zwischen Raspberry Pi und Fram Modul: No module named 'adafruit_fram'
