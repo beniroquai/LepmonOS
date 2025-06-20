@@ -22,6 +22,7 @@ from utils.json_read_write import (
     get_value_from_section,
     write_json,
     read_json,
+    get_config_path,
 )
 from utils.service import get_disk_space
 from utils.log import log_schreiben
@@ -39,7 +40,7 @@ stop_event = threading.Event()      # shared shutdown flag
 
 # ────── paths / constants ─────────────────────────────────────────────────────
 
-CONFIG_PATH = "./config/Lepmon_config.json"
+CONFIG_PATH = get_config_path("Lepmon_config.json")
 LOG_PATH    = CONFIG_PATH
 API_PORT    = 8000
 OVERRIDE_TIMECHECK = True
@@ -188,7 +189,7 @@ def main_loop():
         ordner      = get_value_from_section(CONFIG_PATH, "general", "current_folder")
         Dateiname   = os.path.basename(ordner)
         zieldatei   = os.path.join(ordner, f"{Dateiname}_Kameraeinstellungen.xml")
-        shutil.copy("./config/Kamera_Einstellungen.xml", zieldatei)
+        shutil.copy(get_config_path("Kamera_Einstellungen.xml"), zieldatei)
         checksum(zieldatei, algorithm="md5")
     except Exception:
         pass

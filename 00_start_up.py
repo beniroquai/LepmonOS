@@ -39,8 +39,8 @@ if __name__ == "__main__":
     
     # Get version information
     try:
-        Version = get_value_from_section("./config/Lepmon_config.json", "software", "version")
-        date = get_value_from_section("./config/Lepmon_config.json", "software", "date") 
+        Version = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "version")
+        date = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "date") 
     except Exception as e:
         Version = "V1.0"
         date = "2024"
@@ -74,7 +74,7 @@ if __name__ == "__main__":
             print(f"FRAM read attempt {attempts + 1} failed: {e}")
         
         try:
-            sn = get_value_from_section("./config/LepmonOS_serial_number.json", "general", "serielnumber")
+            sn = get_value_from_section(get_config_path("LepmonOS_serial_number.json"), "general", "serielnumber")
             if sn and sn != "":
                 print(f"Serial Number from JSON: {sn}")
                 break
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         
     # Write serial number to config
     try:
-        write_value_to_section("./config/Lepmon_config.json", "general", "serielnumber", sn)
+        write_value_to_section(get_config_path("Lepmon_config.json"), "general", "serielnumber", sn)
     except Exception as e:
         print(f"Could not write serial number to config: {e}")
 

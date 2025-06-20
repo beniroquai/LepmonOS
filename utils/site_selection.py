@@ -17,9 +17,9 @@ with open(os.path.join(current_dir.split("utils")[0], "config/sites.json"), "r")
 
 
 def set_location_code():
-    country_old = get_value_from_section("./config/Lepmon_config.json", "locality", "country")
-    province_old = get_value_from_section("./config/Lepmon_config.json", "locality", "province")
-    city_code_old = get_value_from_section("./config/Lepmon_config.json", "locality", "city")
+    country_old = get_value_from_section(get_config_path("Lepmon_config.json"), "locality", "country")
+    province_old = get_value_from_section(get_config_path("Lepmon_config.json"), "locality", "province")
+    city_code_old = get_value_from_section(get_config_path("Lepmon_config.json"), "locality", "city")
     level = "country"
     index = 0
     country = None
@@ -86,9 +86,9 @@ def set_location_code():
         
     
     
-    write_value_to_section("./config/Lepmon_config.json", "locality", "country", country)   
-    write_value_to_section("./config/Lepmon_config.json", "locality", "province",province_code)
-    write_value_to_section("./config/Lepmon_config.json", "locality", "city",city_code)
+    write_value_to_section(get_config_path("Lepmon_config.json"), "locality", "country", country)   
+    write_value_to_section(get_config_path("Lepmon_config.json"), "locality", "province",province_code)
+    write_value_to_section(get_config_path("Lepmon_config.json"), "locality", "city",city_code)
     print("saved information on location code in configuration file")
         
     new = False
