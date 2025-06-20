@@ -94,12 +94,10 @@ def get_value_from_section(file_path, section_name, key_name):
         return f"Fehler: {e}"
 
 def get_coordinates():
-    config_dir = os.path.dirname(os.path.abspath(__file__)).split("utils")[0]
-
-    latitude = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "latitude")
-    longitude = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "longitude")
-    Pol = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "Pol")
-    Block = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "Block")
+    latitude = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "latitude")
+    longitude = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "longitude")
+    Pol = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "Pol")
+    Block = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "Block")
 
     if Pol == "N":
         Pol = ""

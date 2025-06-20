@@ -5,7 +5,7 @@ import time
 from datetime import datetime, timedelta
 from utils.times import Zeit_aktualisieren
 from utils.RTC_alarm import set_alarm
-from utils.json_read_write import  get_value_from_section
+from utils.json_read_write import  get_value_from_section, get_config_path
 from utils.runtime import on_shutdown
 try:
     from utils.fram_direct import *
@@ -18,7 +18,7 @@ def trap_shutdown(i):
         Errorcode = int.from_bytes(read_fram_bytes(0x0810, 4), byteorder='big')
     except Exception as e:  
         try:
-            Errorcode = int(get_value_from_section("./config/Lepmon_config.json", "general", "errorcode"))
+            Errorcode = int(get_value_from_section(get_config_path("Lepmon_config.json"), "general", "errorcode"))
         except Exception:
             Errorcode = 0
     print(f"Fehlercode: {Errorcode}")

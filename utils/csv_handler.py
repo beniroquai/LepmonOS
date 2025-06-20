@@ -1,16 +1,16 @@
 import os
 import csv
-from .json_read_write import get_value_from_section
+from .json_read_write import get_value_from_section, get_config_path
 from datetime import datetime
 from .times import *
 from .error_handling import error_message
 
 def erstelle_und_aktualisiere_csv(sensor_data):
     try:
-        dusk_treshold = get_value_from_section("./config/Lepmon_config.json", "capture_mode", "dusk_treshold")
-        interval = get_value_from_section("./config/Lepmon_config.json", "capture_mode", "interval")
-        sensor_id = get_value_from_section("./config/Lepmon_config.json", "general", "serielnumber")    
-        path = get_value_from_section("./config/Lepmon_config.json", "general", "current_folder")
+        dusk_treshold = get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "dusk_treshold")
+        interval = get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "interval")
+        sensor_id = get_value_from_section(get_config_path("Lepmon_config.json"), "general", "serielnumber")    
+        path = get_value_from_section(get_config_path("Lepmon_config.json"), "general", "current_folder")
     except Exception as e:
         error_message(11,e)
     csv_name = f"{os.path.basename(path)}.csv"

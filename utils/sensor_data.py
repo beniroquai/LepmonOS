@@ -10,7 +10,7 @@ import json
 import os
 import logging
 from utils.service import log_schreiben
-from utils.json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section, get_config_path
 from utils.error_handling import error_message
 
 from utils.times import *
@@ -31,7 +31,7 @@ def update_sensor_data(lib,key, value):
 
 def read_sensor_data(code,lokale_Zeit):
     try:
-        Dämmerungsschwellenwert = get_value_from_section("./config/Lepmon_config.json", "capture_mode", "dusk_treshold")
+        Dämmerungsschwellenwert = get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "dusk_treshold")
     except Exception as e:
         error_message(11,e)
     update_sensor_data(sensor_data, "code", code)
@@ -116,8 +116,8 @@ def read_sensor_data(code,lokale_Zeit):
     return sensor_data
 
 def write_sensor_data_to_json(sensor_data,sensor_status):
-    file_path_data = "./config/sensor_values.json"  # Datei im gleichen Ordner
-    file_path_status = "./config/sensor_status.json"
+    file_path_data = get_config_path("sensor_values.json")  # Datei im gleichen Ordner
+    file_path_status = get_config_path("sensor_status.json")
 
     try:
         with open(file_path_data, "w") as json_file:
