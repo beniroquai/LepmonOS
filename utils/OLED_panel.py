@@ -71,8 +71,9 @@ def display_image (path):
     
     :param path: Pfad zum Bild
     """
-    logo = Image.open(path)  # Konvertiere das Bild in Schwarz-Weiß
+    # Convert image to 1-bit mode
+    logo = Image.open(path).convert("1")
 
     with canvas(oled) as draw:
         draw.rectangle(oled.bounding_box, outline="white", fill="black")
-        draw.bitmap((0, 0), logo, fill="white") 
+        draw.bitmap((0, 0), logo, fill="white")

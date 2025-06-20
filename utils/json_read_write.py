@@ -99,7 +99,7 @@ def write_value_to_section(file_path, section_name, key_name, value):
     try:
         # JSON-Datei laden oder erstellen, falls sie nicht existiert
         try:
-            with open(os.path.join(current_dir,file_path), "r") as json_file:
+            with open(os.path.join(current_dir.split("utils")[0],file_path), "r") as json_file:
                 data = json.load(json_file)
         except FileNotFoundError:
             data = {}  # Leeres Dictionary, falls die Datei nicht existiert
