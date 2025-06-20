@@ -43,13 +43,8 @@ COPY . /home/pi/LepmonOS
 RUN apt-get update && apt-get install -y --no-install-recommends \
   sudo
 
-# Copy startup script to /opt and make it executable.
-COPY LepmonOS_start.sh /opt/LepmonOS_start.sh
-RUN chmod +x /home/pi/LepmonOS/LepmonOS_start.sh
-
-
 # Set the working directory.
 WORKDIR /home/pi/LepmonOS
 
-# Run the startup script by default.
-CMD ["/home/pi/LepmonOS/LepmonOS_start.sh"]
+# Run the Python main script by default.
+CMD ["python3", "main.py"]
