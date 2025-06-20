@@ -1,11 +1,13 @@
 from datetime import datetime
-from utils.json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section, get_config_path
 from utils.lora import send_lora
 
 
-def log_schreiben(text, mPath="./config/Lepmon_config.json"):
+def log_schreiben(text, mPath=None):
     """Schreibt den übergebenen Text in das Logfile."""
     lokale_Zeit = datetime.now()
+    if mPath is None:
+        mPath = get_config_path("Lepmon_config.json")
     try:
         log_dateipfad = get_value_from_section(mPath,"general","current_log")
     except Exception as e:

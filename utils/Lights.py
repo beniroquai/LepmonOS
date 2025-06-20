@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-from utils.json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section, get_config_path
 from utils.log import log_schreiben
 
 LepiLed_pin = 26
@@ -17,7 +17,7 @@ LepiLed_pwm = GPIO.PWM(LepiLed_pin, Blitz_PMW)
 
 
 def dim_up():
-   flash = get_value_from_section("./config/Lepmon_config.json","capture_mode","flash")
+   flash = get_value_from_section(get_config_path("Lepmon_config.json"),"capture_mode","flash")
    dimmer_pwm.start(0)
    for duty_cycle in range(0, 99,1):
         dimmer_pwm.ChangeDutyCycle(duty_cycle)
@@ -27,7 +27,7 @@ def dim_up():
 def dim_down(): 
   import os 
   current_dir = os.path.dirname(os.path.abspath(__file__))    
-  flash = get_value_from_section(os.path.join(current_dir.split("utils")[0],"config/Lepmon_config.json"),"capture_mode","flash") 
+  flash = get_value_from_section(get_config_path("Lepmon_config.json"),"capture_mode","flash") 
   dimmer_pwm.start(100)
   for duty_cycle in range(99, 0, -1):
         dimmer_pwm.ChangeDutyCycle(duty_cycle)
@@ -37,7 +37,7 @@ def dim_down():
 
 
 def LepiLED_start():
-    flash = get_value_from_section("./config/Lepmon_config.json","capture_mode","flash") 
+    flash = get_value_from_section(get_config_path("Lepmon_config.json"),"capture_mode","flash") 
     LepiLed_pwm.start(0)
     for duty_cycle in range(0, 99, 1):
         LepiLed_pwm.ChangeDutyCycle(duty_cycle)
@@ -53,7 +53,7 @@ def LepiLED_start():
     '''
 
 def LepiLED_ende():
-    flash = get_value_from_section("./config/Lepmon_config.json","capture_mode","flash") 
+    flash = get_value_from_section(get_config_path("Lepmon_config.json"),"capture_mode","flash") 
     print("dimme UV LED runter")
     LepiLed_pwm.start(100)
     for duty_cycle in range(99, 0, -1):

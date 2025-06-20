@@ -1,6 +1,29 @@
 import json
 import os 
 
+def get_project_root():
+    """
+    Get the project root directory path.
+    
+    Returns:
+        str: Absolute path to the project root directory
+    """
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # Go up from utils to project root
+    return current_dir.split("utils")[0]
+
+def get_config_path(config_file):
+    """
+    Get the full path to a config file.
+    
+    Args:
+        config_file (str): Name of the config file (e.g., "Lepmon_config.json")
+        
+    Returns:
+        str: Full path to the config file
+    """
+    return os.path.join(get_project_root(), "config", config_file)
+
 def read_json(file_path):
     """
     Reads and returns the entire JSON content from a file.
@@ -71,12 +94,10 @@ def get_value_from_section(file_path, section_name, key_name):
         return f"Fehler: {e}"
 
 def get_coordinates():
-    config_dir = os.path.dirname(os.path.abspath(__file__)).split("utils")[0]
-
-    latitude = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "latitude")
-    longitude = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "longitude")
-    Pol = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "Pol")
-    Block = get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "GPS", "Block")
+    latitude = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "latitude")
+    longitude = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "longitude")
+    Pol = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "Pol")
+    Block = get_value_from_section(get_config_path("Lepmon_config.json"), "GPS", "Block")
 
     if Pol == "N":
         Pol = ""

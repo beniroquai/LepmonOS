@@ -84,8 +84,8 @@ def get_experiment_times():
         import os 
         config_dir = os.path.dirname(os.path.abspath(__file__)).split("utils")[0]
         latitude, longitude,_,_ = (get_coordinates()) 
-        lepi_led_buffer = timedelta(minutes=int(get_value_from_section(os.path.join(config_dir, "config/Lepmon_config.json"), "capture_mode", "LepiLed_buffer")))
-        time_buffer = timedelta(minutes=int(get_value_from_section(os.path.join(config_dir,"config/Lepmon_config.json"), "capture_mode", "time_buffer")))  
+        lepi_led_buffer = timedelta(minutes=int(get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "LepiLed_buffer")))
+        time_buffer = timedelta(minutes=int(get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "time_buffer")))  
     except Exception  as e:
         error_message(11,e)
     
@@ -114,7 +114,7 @@ def get_experiment_times():
 def get_times_power():
     latitude, longitude,_,_ = (get_coordinates()) 
 
-    time_buffer = timedelta(minutes=int(get_value_from_section("./config/Lepmon_config.json", "capture_mode", "time_buffer")))
+    time_buffer = timedelta(minutes=int(get_value_from_section(get_config_path("Lepmon_config.json"), "capture_mode", "time_buffer")))
     jetzt_local, _ = Zeit_aktualisieren()  # Nur das erste Element des Tupels verwenden
     sunset, sunrise, _ = get_sun()
     
