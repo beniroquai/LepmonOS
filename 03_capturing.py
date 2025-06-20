@@ -231,7 +231,7 @@ def main_loop():
             sensors = read_sensor_data(code, lokale_Zeit)
             sensors.update({"Status_Kamera": Status_Kamera, "Exposure": Exposure})
 
-            if power_on != "---" and sensors["power"] != "---":
+            if power_on != "---" and https://100.76.211.28/ != "---":
                 Visible_LED = round((power_on - sensors["power"]) / 1000, 2)
                 if Visible_LED > 3:
                     Status_LED = 1
