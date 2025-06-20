@@ -1,9 +1,4 @@
-__pycache__/
-*.pyc
-*.log
-.env
-.vscode/
-.DS_Store# Ignoriere den Ordner __pycache__
+# Ignoriere den Ordner __pycache__
 __pycache__/
 
 # Ignoriere alle Dateien, die mit ._ beginnen
