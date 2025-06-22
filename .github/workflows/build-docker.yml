@@ -1,4 +1,4 @@
-name: build-lepmonos-arm
+name: build-lepmonos-arm-new
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: desboe/lepmonos
+  IMAGE_NAME: beniroquai/lepmonos
 
 jobs:
   build-arm64:
