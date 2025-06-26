@@ -3,8 +3,9 @@ import time
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 import re
+from utils.json_read_write import get_config_path
 
-CONFIG_PATH = "./config/fram_config.ini"
+CONFIG_PATH = get_config_path("fram_config.ini")
 
 def write_config_to_fram():
     sn = input("🔢 Seriennummer im Format SN123456: ").strip().upper()

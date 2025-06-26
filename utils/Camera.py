@@ -3,16 +3,16 @@ from datetime import datetime
 import os
 import cv2
 from utils.Lights import dim_up, dim_down
-from utils.json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section, get_config_path
 from utils.OLED_panel import display_text
 from utils.log import log_schreiben
 from utils.sensor_data import read_sensor_data
 from utils.error_handling import error_message
 try:
-    project_name = get_value_from_section("./config/Lepmon_config.json","general","project_name")
-    sensor_id = get_value_from_section("./config/Lepmon_config.json","general","serielnumber")
-    province = get_value_from_section("./config/Lepmon_config.json","locality","province")
-    city_code = get_value_from_section("./config/Lepmon_config.json","locality","city")
+    project_name = get_value_from_section(get_config_path("Lepmon_config.json"),"general","project_name")
+    sensor_id = get_value_from_section(get_config_path("Lepmon_config.json"),"general","serielnumber")
+    province = get_value_from_section(get_config_path("Lepmon_config.json"),"locality","province")
+    city_code = get_value_from_section(get_config_path("Lepmon_config.json"),"locality","city")
 except Exception as e:
     error_message(11,e)
 
@@ -40,7 +40,7 @@ def get_frame_vimba(Exposure):
 
                 cam.set_pixel_format(PixelFormat.Bgr8)
 
-                settings_file = './config/Kamera_Einstellungen.xml'.format(cam.get_id())
+                settings_file = get_config_path('Kamera_Einstellungen.xml')
                 cam.load_settings(settings_file, PersistType.All)
 
                 
@@ -71,7 +71,7 @@ def snap_image(file_extension,mode,Kamera_Fehlerserie,Exposure):
     :param file_extension: Dateierweiterung
     :param mode: "display" für lokale ausgabe oder "log" für speichern in der schleife
     """
-    ordnerpfad = get_value_from_section("./config/Lepmon_config.json","general","current_folder")
+    ordnerpfad = get_value_from_section(get_config_path("Lepmon_config.json"),"general","current_folder")
     now = datetime.now()
     code = f"{project_name}{sensor_id}_{province}_{city_code}_{now.strftime('%Y')}-{now.strftime('%m')}-{now.strftime('%d')}_T_{now.strftime('%H%M')}"
     image_file = f"{code}.{file_extension}"

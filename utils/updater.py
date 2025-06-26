@@ -6,13 +6,13 @@ import subprocess
 from utils.fram_direct import *
 from utils.OLED_panel import display_text
 import time
-from utils.json_read_write import get_value_from_section
+from utils.json_read_write import get_value_from_section, get_config_path
 from utils.log import log_schreiben
 from .end import trap_shutdown
 
 def update_LepmonOS():
     usb_mount = get_usb_path()
-    Version = get_value_from_section("./config/Lepmon_config.json", "software", "version")
+    Version = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "version")
     timestamp,_ ,_ = Zeit_aktualisieren()
     update_folder = os.path.join(usb_mount, "LepmonOS_update")
     target_folder = "./"
@@ -70,7 +70,7 @@ def get_current_version():
     try:
         current_version = read_fram(0x0520, 5)
     except Exception as e:
-        current_version = get_value_from_section("./config/Lepmon_config.json", "software", "version")
+        current_version = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "version")
     if current_version:
         return current_version.strip()
     return None
@@ -113,8 +113,8 @@ def update():
             update_LepmonOS()
             print("Update erfolgreich!")
             display_text("Update", "erfolgreich","",1)
-            new_version = get_value_from_section("./config/Lepmon_config.json", "software", "version")
-            new_date = get_value_from_section("./config/Lepmon_config.json", "software", "date")
+            new_version = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "version")
+            new_date = get_value_from_section(get_config_path("Lepmon_config.json"), "software", "date")
             print(f"Neue Version: {new_version} vom {new_date}")
             display_text("Neue Version:", new_version, new_date,3)
             log_schreiben(f"neue Softwareversion:{new_version}")
